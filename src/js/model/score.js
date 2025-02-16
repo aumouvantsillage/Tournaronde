@@ -2,8 +2,8 @@
 const DEFAULT_WIDTH = 4
 const DEFAULT_HEIGHT = 4
 const DEFAULT_TITLE = "New Score";
-const DEFAULT_TIME_SIGNATURE = [4, 4];
-const DEFAULT_TEMPO = [4, 120];
+const DEFAULT_TIME_SIGNATURE = {beats: 4, unit: 4};
+const DEFAULT_TEMPO = {unit: 4, bpm: 120};
 
 const CHORDS_PER_CELL = 4
 

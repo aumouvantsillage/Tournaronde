@@ -1,89 +1,82 @@
 
 import {chordToHTML} from "./chord.js";
 
-const CHORD_MAPPING = [
-    [
-        [0, 2, 0, 4],
-        [1, 2, 0, 2],
-        [4, 4, 4, 4] // N/A
-    ],
-    [
-        [0, 1, 0, 2],
-        [0, 4, 4, 4],
-        [3, 4, 2, 4],
-    ],
-    [
-        [4, 4, 4, 4], // N/A
-        [2, 3, 2, 4],
-        [2, 4, 0, 4]
-    ]
-];
-
 export class ScoreView {
     constructor(score, container) {
-        this.container = container;
-        this.score = score;
+        this.score                   = score;
+        this.controller              = null;
+        this.container               = container;
 
-        this.widthInput = container.querySelector("input[name='score-width']");
-        this.heightInput = container.querySelector("input[name='score-height']");
-        this.titleHeading = container.querySelector(".score-title");
-        this.timeSignatureInputs = container.querySelectorAll(".score-time-signature input");
-        this.tempoInputs = container.querySelectorAll(".score-tempo > *");
-        this.chordsTable = container.querySelector(".score-chords table");
+        this.widthInput              = container.querySelector("input[name='score-width']");
+        this.heightInput             = container.querySelector("input[name='score-height']");
+        this.titleHeading            = container.querySelector(".score-title");
+        this.timeSignatureBeatsInput = container.querySelector("input[name='score-time-signature-beats']");
+        this.timeSignatureUnitInput  = container.querySelector("input[name='score-time-signature-unit']");
+        this.tempoUnitInput          = container.querySelector("select[name='score-tempo-unit']");
+        this.tempoBpmInput           = container.querySelector("input[name='score-tempo-bpm']");
+        this.chordsTable             = container.querySelector(".score-chords table");
+    }
+
+    setController(controller) {
+        this.controller = controller;
 
         this.widthInput.addEventListener("change", (_) => {
-            this.score.setWidth(parseInt(this.widthInput.value));
-            this.redraw();
+            this.controller.setScoreWidth(parseInt(this.widthInput.value));
         });
 
         this.heightInput.addEventListener("change", (_) => {
-            this.score.setHeight(parseInt(this.heightInput.value));
-            this.redraw();
+            this.controller.setScoreHeight(parseInt(this.heightInput.value));
         });
     }
 
     redraw() {
-        this.widthInput.value = this.score.width;
-        this.heightInput.value = this.score.height;
-        this.titleHeading.innerText = this.score.title;
-        this.score.timeSignature.forEach((v, i) => this.timeSignatureInputs[i].value = v);
-        this.score.tempo.forEach((v, i) => this.tempoInputs[i].value = v);
+        this.widthInput.value              = this.score.width;
+        this.heightInput.value             = this.score.height;
+        this.titleHeading.innerText        = this.score.title;
+        this.timeSignatureBeatsInput.value = this.score.timeSignature.beats;
+        this.timeSignatureUnitInput.value  = this.score.timeSignature.unit;
+        this.tempoUnitInput.value          = this.score.tempo.unit;
+        this.tempoBpmInput.value           = this.score.tempo.bpm;
 
         this.chordsTable.innerHTML = "";
-
-        function chordAtStep(chords, col, row) {
-            const [eqLeft, eqRight, neLeft, neRight] = CHORD_MAPPING[row][col];
-
-            if (eqLeft >= chords.length || chords.slice(eqLeft + 1, eqRight).some(it => !chords[eqLeft].equals(it))) {
-                return null;
-            }
-
-            if (neLeft < chords.length && chords.slice(neLeft + 1, neRight).every(it => chords[neLeft].equals(it))) {
-                return null;
-            }
-
-            return chords[eqLeft];
-        }
 
         for (let row = 0; row < this.score.height; row ++) {
             for (let stepRow = 0; stepRow < 3; stepRow ++) {
                 const tr = document.createElement("tr");
                 for (let col = 0; col < this.score.width; col++) {
-                    const chords = this.score.getChords(col, row);
                     for (let stepCol = 0; stepCol < 3; stepCol ++) {
                         const td = document.createElement("td");
-                        const chord = chordAtStep(chords, stepCol, stepRow);
+                        tr.appendChild(td);
+
+                        if (stepCol === 0 && stepRow === 2 || stepCol === 2 && stepRow === 0) {
+                            td.classList.add("disabled");
+                            continue;
+                        }
+
+                        td.addEventListener("click", (_) => {
+                            this.controller.select(col, row, stepCol, stepRow);
+                        });
+
+                        const chord = this.controller.getChordAtStep(col, row, stepCol, stepRow, true);
                         if (chord !== null) {
                             td.innerHTML = chordToHTML(chord);
                         }
                         else {
                             td.innerHTML = "&nbsp;";
                         }
-                        tr.appendChild(td);
                     }
                 }
                 this.chordsTable.appendChild(tr);
             }
         }
+    }
+
+    showSelection() {
+        this.chordsTable.querySelectorAll("td").forEach(td => td.classList.remove("selected"));
+        const trs = this.chordsTable.querySelectorAll("tr");
+        const selectedTr = trs[this.controller.selected.row * 3 + this.controller.selected.stepRow];
+        const tds = selectedTr.querySelectorAll("td");
+        const selectedTd = tds[this.controller.selected.col * 3 + this.controller.selected.stepCol];
+        selectedTd.classList.add("selected");
     }
 }

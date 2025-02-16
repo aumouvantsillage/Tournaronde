@@ -1,11 +1,15 @@
 
 import {Score} from "./model/score.js";
 import {Chord} from "./model/chord.js";
+import {Controller} from "./controller.js";
 import {ScoreView} from "./view/score.js";
+import {PaletteView} from "./view/palette.js";
 
 function onLoad() {
-    const sc = new Score();
-    const v = new ScoreView(sc, document.querySelector("#score-view"))
+    const score = new Score();
+    const scoreView = new ScoreView(score, document.querySelector(".score-view"));
+    const paletteView = new PaletteView(score, document.querySelector(".palette-view"));
+    const controller = new Controller(score, scoreView, paletteView);
 
     const C = new Chord();
 
@@ -24,7 +28,7 @@ function onLoad() {
     Gsm7b5.extension = "7";
     Gsm7b5.fifth = "flat";
 
-    sc.chords = [
+    score.chords = [
         C, C, C, C,
         C, C, A7, A7,
         C, A7, Dbm, Gsm7b5,
@@ -34,7 +38,7 @@ function onLoad() {
         C, C, C, A7,
         C, A7, A7, A7
     ];
-    v.redraw();
+    scoreView.redraw();
 }
 
 window.addEventListener("load", onLoad);

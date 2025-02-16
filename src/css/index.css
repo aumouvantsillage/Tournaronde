@@ -19,10 +19,25 @@ body {
 
 .score-chords td {
     padding: 0.5em 1em;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
 }
 
 .score-chords td:hover {
-    background-color: lightgray;
+    background-color: rgb(240, 240, 240);
+}
+
+.score-chords td.disabled:hover {
+    background-color: transparent;
+}
+
+.score-chords td.selected {
+    background-color: rgb(230, 230, 230);
+}
+
+.score-chords td.selected:hover {
+    background-color: rgb(220, 220, 220);
 }
 
 .score-chords td:nth-child(3n+3) {
@@ -33,7 +48,7 @@ body {
     border-bottom: 1px solid black;
 }
 
-.palette {
+.palette-view {
     display: table;
     margin: 1em auto;
 }
