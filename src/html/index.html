@@ -7,17 +7,17 @@
 <div class="score-view">
     <div class="score-properties">
         <label for="score-width">Grid width:</label>&nbsp;
-        <input type="number" name="score-width">
+        <input type="number" min="1" name="score-width">
         <label for="score-height">Grid height:</label>&nbsp;
-        <input type="number" name="score-height">
+        <input type="number" min="1" name="score-height">
     </div>
 
     <h1 class="score-title" contenteditable="true"></h1>
 
     <div class="score-time-signature">
-        <input type="number" name="score-time-signature-beats">
+        <input type="number" min="1" name="score-time-signature-beats">
         &nbsp;/&nbsp;
-        <input type="number" name="score-time-signature-unit">
+        <input type="number" min="1" name="score-time-signature-unit">
     </div>
 
     <div class="score-tempo">
@@ -29,7 +29,7 @@
             <option value="16">e &#119137;</option>
         </select>
         &nbsp;=&nbsp;
-        <input type="number" name="score-tempo-bpm">
+        <input type="number" min="1" name="score-tempo-bpm">
     </div>
 
     <div class="score-chords">

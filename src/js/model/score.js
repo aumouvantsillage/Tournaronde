@@ -34,14 +34,14 @@ export class Score {
     }
 
     setWidth(width) {
-        if (width >= 0) {
+        if (width > 0) {
             this.width = width;
             this.resize();
         }
     }
 
     setHeight(height) {
-        if (height >= 0) {
+        if (height > 0) {
             this.height = height;
             this.resize();
         }
