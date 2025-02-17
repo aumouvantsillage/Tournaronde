@@ -71,11 +71,16 @@ export class Controller {
         this.paletteView.showSelection();
     }
 
-    updateSelectedChord(rootNode, rootAlt, quality, fifth, extension, addition, bassNote, bassAlt) {
+    updateSelectedChord(rootNote, rootAlt, quality, fifth, extension, addition, bassNote, bassAlt) {
         const chords = this.score.getChordsInBar(this.selected.col, this.selected.row);
         const [eqLeft, eqRight, neLeft, neRight] = CHORD_MAPPING[this.selected.slotRow][this.selected.slotCol];
         for (let i = eqLeft; i < eqRight; i ++) {
-            
+            chords[i].copy({
+                rootNote: [rootNote, rootAlt],
+                quality, fifth, extension, addition,
+                bassNote: [bassNote, bassAlt]
+            });
         }
+        this.scoreView.redraw();
     }
 }

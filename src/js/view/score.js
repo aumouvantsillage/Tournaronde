@@ -69,6 +69,8 @@ export class ScoreView {
                 this.chordsTable.appendChild(tr);
             }
         }
+
+        this.showSelection();
     }
 
     showSelection() {

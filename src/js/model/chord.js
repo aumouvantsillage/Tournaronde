@@ -17,11 +17,23 @@ export class Chord {
     }
 
     copy(other) {
-        Object.keys(this).forEach(key => this[key] = other[key]);
+        this.rootNote  = other.rootNote.slice();
+        this.bassNote  = other.bassNote.slice();
+        this.quality   = other.quality;
+        this.fifth     = other.fifth;
+        this.extension = other.extension;
+        this.addition  = other.addition;
     }
 
     equals(other) {
-        return Object.keys(this).every(key => this[key] === other[key]);
+        return this.rootNote[0] === other.rootNote[0] &&
+               this.rootNote[1] === other.rootNote[1] &&
+               this.bassNote[0] === other.bassNote[0] &&
+               this.bassNote[1] === other.bassNote[1] &&
+               this.quality     === other.quality     &&
+               this.fifth       === other.fifth       &&
+               this.extension   === other.extension   &&
+               this.addition    === other.addition;
     }
 
     isEmpty()  {
