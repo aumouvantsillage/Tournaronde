@@ -36,14 +36,24 @@ export class Controller {
         };
     }
 
+    save() {
+        localStorage.setItem(this.score.id, this.score.serialize());
+    }
+
+    load(id) {
+        this.score.deserialize(localStorage.getItem(id));
+    }
+
     setScoreWidth(width) {
         this.score.setWidth(width);
         this.scoreView.redraw();
+        this.save();
     }
 
     setScoreHeight(height) {
         this.score.setHeight(height);
         this.scoreView.redraw();
+        this.save();
     }
 
     getChordInSlot(col, row, slotCol, slotRow, merge) {
@@ -82,5 +92,6 @@ export class Controller {
             });
         }
         this.scoreView.redraw();
+        this.save();
     }
 }

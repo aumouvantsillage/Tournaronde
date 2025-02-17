@@ -11,6 +11,7 @@ const CHORDS_PER_BAR = 4
 
 export class Score {
     constructor() {
+        this.id            = Date.now();
         this.width         = DEFAULT_WIDTH;
         this.height        = DEFAULT_HEIGHT;
         this.title         = DEFAULT_TITLE;
@@ -18,6 +19,21 @@ export class Score {
         this.tempo         = DEFAULT_TEMPO;
         this.chords        = [];
         this.resize();
+    }
+
+    serialize() {
+        return JSON.stringify(this);
+    }
+
+    deserialize(json) {
+        const obj = JSON.parse(json);
+        this.id            = obj.id;
+        this.width         = obj.width;
+        this.height        = obj.height;
+        this.title         = obj.title;
+        this.timeSignature = structuredClone(obj.timeSignature);
+        this.tempo         = structuredClone(obj.tempo);
+        this.chords        = obj.chords.map(it => new Chord().copy(it));
     }
 
     resize() {
