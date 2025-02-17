@@ -34,6 +34,9 @@ export class Controller {
             slotCol: 1,
             slotRow: 1
         };
+
+        this.scoreView.redraw();
+        this.paletteView.showSelection();
     }
 
     save() {
@@ -41,7 +44,14 @@ export class Controller {
     }
 
     load(id) {
-        this.score.deserialize(localStorage.getItem(id));
+        const json = localStorage.getItem(id);
+        if (json === null) {
+            return;
+        }
+
+        this.score.deserialize(json);
+        this.scoreView.redraw();
+        this.paletteView.showSelection();
     }
 
     setScoreWidth(width) {

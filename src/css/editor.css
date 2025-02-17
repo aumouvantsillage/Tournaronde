@@ -1,0 +1,54 @@
+
+body {
+    font-family: "Noto Sans";
+}
+
+.score-properties,
+.score-title,
+.score-time-signature,
+.score-tempo {
+    text-align: center;
+}
+
+.score-chords table {
+    border-collapse: collapse;
+    margin: 1rem auto;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+}
+
+.score-chords td {
+    padding: 0.5em 1em;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.score-chords td:hover {
+    background-color: rgb(240, 240, 240);
+}
+
+.score-chords td.disabled:hover {
+    background-color: transparent;
+}
+
+.score-chords td.selected {
+    background-color: rgb(230, 230, 230);
+}
+
+.score-chords td.selected:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+.score-chords td:nth-child(3n+3) {
+    border-right: 1px solid black;
+}
+
+.score-chords tr:nth-child(3n+3) td {
+    border-bottom: 1px solid black;
+}
+
+.palette-view {
+    display: table;
+    margin: 1em auto;
+}

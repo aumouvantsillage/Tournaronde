@@ -33,7 +33,7 @@ export class Score {
         this.title         = obj.title;
         this.timeSignature = structuredClone(obj.timeSignature);
         this.tempo         = structuredClone(obj.tempo);
-        this.chords        = obj.chords.map(it => new Chord().copy(it));
+        this.chords        = obj.chords.map(it => new Chord(it));
     }
 
     resize() {
