@@ -41,24 +41,24 @@ export class ScoreView {
         this.chordsTable.innerHTML = "";
 
         for (let row = 0; row < this.score.height; row ++) {
-            for (let stepRow = 0; stepRow < 3; stepRow ++) {
+            for (let slotRow = 0; slotRow < 3; slotRow ++) {
                 const tr = document.createElement("tr");
                 for (let col = 0; col < this.score.width; col++) {
-                    for (let stepCol = 0; stepCol < 3; stepCol ++) {
+                    for (let slotCol = 0; slotCol < 3; slotCol ++) {
                         const td = document.createElement("td");
                         tr.appendChild(td);
 
-                        if (stepCol === 0 && stepRow === 2 || stepCol === 2 && stepRow === 0) {
+                        if (slotCol === 0 && slotRow === 2 || slotCol === 2 && slotRow === 0) {
                             td.classList.add("disabled");
                             continue;
                         }
 
                         td.addEventListener("click", (_) => {
-                            this.controller.select(col, row, stepCol, stepRow);
+                            this.controller.select(col, row, slotCol, slotRow);
                         });
 
-                        const chord = this.controller.getChordAtStep(col, row, stepCol, stepRow, true);
-                        if (chord !== null) {
+                        const chord = this.controller.getChordInSlot(col, row, slotCol, slotRow, true);
+                        if (!chord.isEmpty()) {
                             td.innerHTML = chordToHTML(chord);
                         }
                         else {
@@ -74,9 +74,9 @@ export class ScoreView {
     showSelection() {
         this.chordsTable.querySelectorAll("td").forEach(td => td.classList.remove("selected"));
         const trs = this.chordsTable.querySelectorAll("tr");
-        const selectedTr = trs[this.controller.selected.row * 3 + this.controller.selected.stepRow];
+        const selectedTr = trs[this.controller.selected.row * 3 + this.controller.selected.slotRow];
         const tds = selectedTr.querySelectorAll("td");
-        const selectedTd = tds[this.controller.selected.col * 3 + this.controller.selected.stepCol];
+        const selectedTd = tds[this.controller.selected.col * 3 + this.controller.selected.slotCol];
         selectedTd.classList.add("selected");
     }
 }

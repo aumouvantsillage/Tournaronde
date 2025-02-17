@@ -1,4 +1,6 @@
 
+import {EMPTY_CHORD} from "./model/chord.js";
+
 const CHORD_MAPPING = [
     [
         [0, 2, 0, 4],
@@ -29,8 +31,8 @@ export class Controller {
         this.selected = {
             col: 0,
             row: 0,
-            stepCol: 1,
-            stepRow: 1
+            slotCol: 1,
+            slotRow: 1
         };
     }
 
@@ -44,28 +46,36 @@ export class Controller {
         this.scoreView.redraw();
     }
 
-    getChordAtStep(col, row, stepCol, stepRow, merge) {
-        const chords = this.score.getChords(col, row);
-        const [eqLeft, eqRight, neLeft, neRight] = CHORD_MAPPING[stepRow][stepCol];
+    getChordInSlot(col, row, slotCol, slotRow, merge) {
+        const chords = this.score.getChordsInBar(col, row);
+        const [eqLeft, eqRight, neLeft, neRight] = CHORD_MAPPING[slotRow][slotCol];
 
-        if (eqLeft >= chords.length || chords.slice(eqLeft + 1, eqRight).some(it => !chords[eqLeft].equals(it))) {
-            return null;
+        if (chords.slice(eqLeft + 1, eqRight).some(it => !chords[eqLeft].equals(it))) {
+            return EMPTY_CHORD;
         }
 
         if (merge && neLeft < chords.length && chords.slice(neLeft + 1, neRight).every(it => chords[neLeft].equals(it))) {
-            return null;
+            return EMPTY_CHORD;
         }
 
         return chords[eqLeft];
     }
 
     getSelectedChord() {
-        return this.getChordAtStep(this.selected.col, this.selected.row, this.selected.stepCol, this.selected.stepRow, false);
+        return this.getChordInSlot(this.selected.col, this.selected.row, this.selected.slotCol, this.selected.slotRow, false);
     }
 
-    select(col, row, stepCol, stepRow) {
-        this.selected = {col, row, stepCol, stepRow};
+    select(col, row, slotCol, slotRow) {
+        this.selected = {col, row, slotCol, slotRow};
         this.scoreView.showSelection();
         this.paletteView.showSelection();
+    }
+
+    updateSelectedChord(rootNode, rootAlt, quality, fifth, extension, addition, bassNote, bassAlt) {
+        const chords = this.score.getChordsInBar(this.selected.col, this.selected.row);
+        const [eqLeft, eqRight, neLeft, neRight] = CHORD_MAPPING[this.selected.slotRow][this.selected.slotCol];
+        for (let i = eqLeft; i < eqRight; i ++) {
+            
+        }
     }
 }

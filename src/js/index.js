@@ -12,6 +12,7 @@ function onLoad() {
     const controller = new Controller(score, scoreView, paletteView);
 
     const C = new Chord();
+    C.rootNote = ["C", "natural"];
 
     const Dbm = new Chord();
     Dbm.rootNote = ["D", "flat"];
@@ -28,7 +29,7 @@ function onLoad() {
     Gsm7b5.extension = "7";
     Gsm7b5.fifth = "flat";
 
-    score.chords = [
+    [
         C, C, C, C,
         C, C, A7, A7,
         C, A7, Dbm, Gsm7b5,
@@ -36,8 +37,10 @@ function onLoad() {
         C, C, A7, Dbm,
         C, A7, Dbm, Dbm,
         C, C, C, A7,
-        C, A7, A7, A7
-    ];
+        C, A7, A7, A7,
+        C
+    ].forEach((c, i) => score.chords[i].copy(c));
+
     scoreView.redraw();
 }
 

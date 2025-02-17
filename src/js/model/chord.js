@@ -1,5 +1,5 @@
 
-const DEFAULT_ROOT_NOTE = ["C", "natural"];
+const DEFAULT_ROOT_NOTE = ["none", "natural"];
 const DEFAULT_BASS_NOTE = ["none", "natural"];
 const DEFAULT_QUALITY = "major";
 const DEFAULT_FIFTH = "natural";
@@ -16,7 +16,18 @@ export class Chord {
         this.addition  = DEFAULT_ADDITION;  // "none" | "2" | "4" | "6"
     }
 
+    copy(other) {
+        Object.keys(this).forEach(key => this[key] = other[key]);
+    }
+
     equals(other) {
         return Object.keys(this).every(key => this[key] === other[key]);
     }
+
+    isEmpty()  {
+        return this.rootNote[0] === "none";
+    }
 }
+
+export const EMPTY_CHORD = new Chord();
+
