@@ -7,6 +7,7 @@ export class ScoreView {
         this.controller              = null;
         this.container               = container;
 
+        this.editButton              = container.querySelector("button[name='score-editable']");
         this.widthInput              = container.querySelector("input[name='score-width']");
         this.heightInput             = container.querySelector("input[name='score-height']");
         this.titleHeading            = container.querySelector(".score-title");
@@ -19,6 +20,10 @@ export class ScoreView {
 
     setController(controller) {
         this.controller = controller;
+
+        this.editButton.addEventListener("click", (_) => {
+            this.controller.toggleEditable();
+        });
 
         this.widthInput.addEventListener("change", (_) => {
             this.controller.setScoreWidth(parseInt(this.widthInput.value));
@@ -80,5 +85,28 @@ export class ScoreView {
         const tds = selectedTr.querySelectorAll("td");
         const selectedTd = tds[this.controller.selected.col * 3 + this.controller.selected.slotCol];
         selectedTd.classList.add("selected");
+    }
+
+    setEditable(editable) {
+        if (editable) {
+            this.container.classList.add("editable");
+            this.titleHeading.setAttribute("contenteditable", true);
+            this.widthInput.removeAttribute("disabled");
+            this.heightInput.removeAttribute("disabled");
+            this.timeSignatureBeatsInput.removeAttribute("disabled");
+            this.timeSignatureUnitInput.removeAttribute("disabled");
+            this.tempoUnitInput.removeAttribute("disabled");
+            this.tempoBpmInput.removeAttribute("disabled");
+        }
+        else {
+            this.container.classList.remove("editable");
+            this.titleHeading.setAttribute("contenteditable", false);
+            this.widthInput.removeAttribute("disabled");
+            this.heightInput.setAttribute("disabled", true);
+            this.timeSignatureBeatsInput.setAttribute("disabled", true);
+            this.timeSignatureUnitInput.setAttribute("disabled", true);
+            this.tempoUnitInput.setAttribute("disabled", true);
+            this.tempoBpmInput.setAttribute("disabled", true);
+        }
     }
 }

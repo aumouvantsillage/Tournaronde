@@ -50,4 +50,13 @@ export class PaletteView {
         this.bassNoteInput.value  = chord.bassNote[0];
         this.bassAltInput.value   = chord.bassNote[1];
     }
+
+    setEditable(editable) {
+        if (editable) {
+            this.container.classList.add("editable");
+        }
+        else {
+            this.container.classList.remove("editable");
+        }
+    }
 }

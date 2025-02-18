@@ -28,6 +28,11 @@ export class Controller {
         scoreView.setController(this);
         paletteView.setController(this);
 
+        this.editable = false;
+
+        scoreView.setEditable(false);
+        paletteView.setEditable(false);
+
         this.selected = {
             col: 0,
             row: 0,
@@ -103,5 +108,11 @@ export class Controller {
         }
         this.scoreView.redraw();
         this.save();
+    }
+
+    toggleEditable() {
+        this.editable = !this.editable;
+        this.scoreView.setEditable(this.editable);
+        this.paletteView.setEditable(this.editable);
     }
 }

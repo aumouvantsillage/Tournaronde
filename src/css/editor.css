@@ -3,6 +3,17 @@ body {
     font-family: "Noto Sans";
 }
 
+button[name='score-editable'] {
+    background-color: transparent;
+    padding: 0.5em 1em;
+    border: 2px solid black;
+    border-radius: 1em;
+}
+
+.editable button[name='score-editable'] {
+    background-color: rgb(220, 220, 220);
+}
+
 .score-properties,
 .score-title,
 .score-time-signature,
@@ -13,42 +24,56 @@ body {
 .score-chords table {
     border-collapse: collapse;
     margin: 1rem auto;
-    border-left: 1px solid black;
-    border-top: 1px solid black;
+    border-left: 2px solid black;
+    border-top: 2px solid black;
 }
 
 .score-chords td {
     padding: 0.5em 1em;
     text-align: center;
     vertical-align: middle;
+    cursor: default;
+}
+
+.editable td {
     cursor: pointer;
 }
 
-.score-chords td:hover {
+.editable .score-chords td:hover {
     background-color: rgb(240, 240, 240);
 }
 
-.score-chords td.disabled:hover {
+.editable .score-chords td.disabled:hover {
     background-color: transparent;
 }
 
-.score-chords td.selected {
+.editable .score-chords td.selected {
     background-color: rgb(230, 230, 230);
 }
 
-.score-chords td.selected:hover {
+.editable .score-chords td.selected:hover {
     background-color: rgb(220, 220, 220);
 }
 
 .score-chords td:nth-child(3n+3) {
-    border-right: 1px solid black;
+    border-right: 2px solid black;
 }
 
 .score-chords tr:nth-child(3n+3) td {
-    border-bottom: 1px solid black;
+    border-bottom: 2px solid black;
 }
 
+.score-properties,
 .palette-view {
+    display: none;
+}
+
+.editable .score-properties {
+    display: block;
+}
+
+.palette-view.editable {
     display: table;
     margin: 1em auto;
 }
+

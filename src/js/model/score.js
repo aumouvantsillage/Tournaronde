@@ -1,13 +1,13 @@
 
 import {Chord} from "./chord.js";
 
-const DEFAULT_WIDTH = 4
-const DEFAULT_HEIGHT = 4
-const DEFAULT_TITLE = "New Score";
+const DEFAULT_WIDTH          = 4
+const DEFAULT_HEIGHT         = 4
+const DEFAULT_TITLE          = "New Score";
 const DEFAULT_TIME_SIGNATURE = {beats: 4, unit: 4};
-const DEFAULT_TEMPO = {unit: 4, bpm: 120};
+const DEFAULT_TEMPO          = {unit: 4, bpm: 120};
 
-const CHORDS_PER_BAR = 4
+const CHORDS_PER_BAR         = 4
 
 export class Score {
     constructor() {

@@ -5,14 +5,9 @@
 <script type="module" src="../js/editor.js"></script>
 
 <div class="score-view">
-    <div class="score-properties">
-        <label for="score-width">Grid width:</label>&nbsp;
-        <input type="number" min="1" name="score-width">
-        <label for="score-height">Grid height:</label>&nbsp;
-        <input type="number" min="1" name="score-height">
-    </div>
+    <button name="score-editable">Edit</button>
 
-    <h1 class="score-title" contenteditable="true"></h1>
+    <h1 class="score-title"></h1>
 
     <div class="score-time-signature">
         <input type="number" min="1" name="score-time-signature-beats">
@@ -35,6 +30,13 @@
     <div class="score-chords">
        <table>
        </table> 
+    </div>
+
+    <div class="score-properties">
+        <label for="score-width">Grid size:</label>&nbsp;
+        <input type="number" min="1" name="score-width">
+        &nbsp;&times;&nbsp;
+        <input type="number" min="1" name="score-height">
     </div>
 </div>
 
