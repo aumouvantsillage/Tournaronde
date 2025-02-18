@@ -1,6 +1,7 @@
 
 body {
     font-family: "Noto Sans";
+    font-size: 12pt;
 }
 
 button[name='score-editable'] {
@@ -8,17 +9,32 @@ button[name='score-editable'] {
     padding: 0.5em 1em;
     border: 2px solid black;
     border-radius: 1em;
+    position: absolute;
+    left: 1em;
+    top: 1em;
 }
 
 .editable button[name='score-editable'] {
     background-color: rgb(220, 220, 220);
 }
 
-.score-properties,
+h1 {
+    font-size: 180%;
+}
+
 .score-title,
-.score-time-signature,
-.score-tempo {
+.grid-properties {
     text-align: center;
+}
+
+.score-properties {
+    display: table;
+    margin: 0 auto;
+}
+
+.score-properties div {
+    display: inline-block;
+    margin: 0 2em;
 }
 
 .score-chords table {
@@ -63,17 +79,45 @@ button[name='score-editable'] {
     border-bottom: 2px solid black;
 }
 
-.score-properties,
+.grid-properties,
 .palette-view {
     display: none;
 }
 
-.editable .score-properties {
+.editable .grid-properties {
     display: block;
 }
 
 .palette-view.editable {
     display: table;
     margin: 1em auto;
+}
+
+.score-properties *,
+.grid-properties *,
+.palette-view * {
+    font-size: 120%;
+}
+
+input[type='number'] {
+    text-align: center;
+    width: 3em;
+}
+
+input[type='number'][disabled] {
+    -moz-appearance: textfield;
+    border: none;
+    color: black;
+}
+
+input[name='score-time-signature-beats'][disabled],
+input[name='score-width'][disabled] {
+    text-align: right;
+}
+
+input[name='score-time-signature-unit'][disabled],
+input[name='score-tempo-bpm'][disabled],
+input[name='score-height'][disabled] {
+    text-align: left;
 }
 

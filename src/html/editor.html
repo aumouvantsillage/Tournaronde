@@ -9,22 +9,24 @@
 
     <h1 class="score-title"></h1>
 
-    <div class="score-time-signature">
-        <input type="number" min="1" name="score-time-signature-beats">
-        &nbsp;/&nbsp;
-        <input type="number" min="1" name="score-time-signature-unit">
-    </div>
+    <div class="score-properties">
+        <div class="score-time-signature">
+            <input type="number" min="1" name="score-time-signature-beats">
+            &nbsp;/&nbsp;
+            <input type="number" min="1" name="score-time-signature-unit">
+        </div>
 
-    <div class="score-tempo">
-        <select name="score-tempo-unit">
-            <option value="1">a &#119133;</option>
-            <option value="2">b &#119134;</option>
-            <option value="4">c &#119135;</option>
-            <option value="8">d &#119136;</option>
-            <option value="16">e &#119137;</option>
-        </select>
-        &nbsp;=&nbsp;
-        <input type="number" min="1" name="score-tempo-bpm">
+        <div class="score-tempo">
+            <select name="score-tempo-unit">
+                <option value="1">a &#119133;</option>
+                <option value="2">b &#119134;</option>
+                <option value="4">c &#119135;</option>
+                <option value="8">d &#119136;</option>
+                <option value="16">e &#119137;</option>
+            </select>
+            &nbsp;=&nbsp;
+            <input type="number" min="1" name="score-tempo-bpm">
+        </div>
     </div>
 
     <div class="score-chords">
@@ -32,7 +34,7 @@
        </table> 
     </div>
 
-    <div class="score-properties">
+    <div class="grid-properties">
         <label for="score-width">Grid size:</label>&nbsp;
         <input type="number" min="1" name="score-width">
         &nbsp;&times;&nbsp;
