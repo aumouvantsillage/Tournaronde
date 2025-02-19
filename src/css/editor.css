@@ -37,46 +37,45 @@ h1 {
     margin: 0 2em;
 }
 
-.score-chords table {
-    border-collapse: collapse;
+.score-chords svg {
+    display: table;
     margin: 1rem auto;
-    border-left: 2px solid black;
-    border-top: 2px solid black;
 }
 
-.score-chords td {
-    padding: 0.5em 1em;
-    text-align: center;
-    vertical-align: middle;
-    cursor: default;
+.score-chords rect:first-child,
+.score-chords line {
+    fill: none;
+    stroke: black;
+    stroke-width: 2px;
 }
 
-.editable td {
+.score-chords rect.slot {
+    fill: transparent;
+    stroke: none;
+}
+
+.editable .score-chords rect.slot:not(.inactive):hover {
+    fill: rgba(0, 0, 0, 10%);
     cursor: pointer;
 }
 
-.editable .score-chords td:hover {
-    background-color: rgb(240, 240, 240);
+.editable .score-chords rect.slot.selected {
+    fill: rgba(0, 0, 0, 15%);
 }
 
-.editable .score-chords td.disabled:hover {
-    background-color: transparent;
+.editable .score-chords rect.slot.selected:hover {
+    fill: rgba(0, 0, 0, 20%);
 }
 
-.editable .score-chords td.selected {
-    background-color: rgb(230, 230, 230);
+.score-chords text.chord {
+    text-align: center;
+    text-anchor: middle;
+    dominant-baseline: central;
 }
 
-.editable .score-chords td.selected:hover {
-    background-color: rgb(220, 220, 220);
-}
-
-.score-chords td:nth-child(3n+3) {
-    border-right: 2px solid black;
-}
-
-.score-chords tr:nth-child(3n+3) td {
-    border-bottom: 2px solid black;
+.score-chords text.chord .sup {
+    /* vertical-align: 25%; Does not work in Firefox */
+    font-size: 75%;
 }
 
 .grid-properties,

@@ -6,6 +6,12 @@ const DEFAULT_FIFTH = "natural";
 const DEFAULT_EXTENSION = "none";
 const DEFAULT_ADDITION = "none";
 
+const ALTERATION = {
+    "natural": "",
+    "flat": "♭",
+    "sharp": "♯"
+};
+
 export class Chord {
     constructor(other = null) {
         if (other != null) {
@@ -43,6 +49,53 @@ export class Chord {
 
     isEmpty()  {
         return this.rootNote[0] === "none";
+    }
+
+    toText() {
+        const res = {
+            left: this.rootNote[0] + ALTERATION[this.rootNote[1]]
+        };
+
+        if (this.quality === "minor") {
+            res.left += "m";
+        }
+
+        // Additional annotations are displayed in superscript.
+        if ((this.quality !== "major" && this.quality !== "minor") ||
+            this.fifth !== "natural" || this.extension !== "none" ||
+            this.addition !== "none") {
+            res.middle = "";
+        }
+
+        // Add the this extension, if applicable.
+        if (this.extension !== "none") {
+            res.middle += this.extension;
+        }
+
+        // Add the "suspended" or "no third" this quality, if applicable.
+        if (this.quality === "no3" && this.extension === "none") {
+            res.middle += "5";
+        }
+        else if (this.quality !== "major" && this.quality !== "minor") {
+            res.middle += this.quality;
+        }
+
+        // Add the this addition, if applicable.
+        if (this.addition !== "none") {
+            res.middle += "add" + this.addition;
+        }
+
+        // Add the diminished or augmented fifth. "dim7" implies "flat5".
+        if (this.fifth !== "natural" && (this.fifth !== "flat" || this.extension != "dim7")) {
+            res.middle += ALTERATION[this.fifth] + "5";
+        }
+
+        // Add the bass note if different from the root note.
+        if (this.bassNote[0] !== "none") {
+            res.right = "/" + this.bassNote[0] + ALTERATION[this.bassNote[1]];
+        }
+
+        return res;
     }
 }
 

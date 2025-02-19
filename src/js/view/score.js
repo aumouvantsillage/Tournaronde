@@ -1,5 +1,23 @@
 
-import {chordToHTML} from "./chord.js";
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+const TEXT_LOCATION =  [
+    [
+        {x: 1/4, y: 1/4},
+        {x: 1/2, y: 1/6},
+        {x: 0, y: 0} // Inactive
+    ],
+    [
+        {x: 1/6, y: 1/2},
+        {x: 1/2, y: 1/2},
+        {x: 5/6, y: 1/2}
+    ],
+    [
+        {x: 0, y: 0}, // Inactive
+        {x: 1/2, y: 5/6},
+        {x: 0.75, y: 0.75}
+    ]
+];
 
 export class ScoreView {
     constructor(score, container) {
@@ -15,7 +33,7 @@ export class ScoreView {
         this.timeSignatureUnitInput  = container.querySelector("input[name='score-time-signature-unit']");
         this.tempoUnitInput          = container.querySelector("select[name='score-tempo-unit']");
         this.tempoBpmInput           = container.querySelector("input[name='score-tempo-bpm']");
-        this.chordsTable             = container.querySelector(".score-chords table");
+        this.grid                    = container.querySelector(".score-chords svg");
     }
 
     setController(controller) {
@@ -37,41 +55,111 @@ export class ScoreView {
     redraw() {
         this.widthInput.value              = this.score.width;
         this.heightInput.value             = this.score.height;
-        this.titleHeading.innerText        = this.score.title;
+        this.titleHeading.innerHTML        = this.score.title;
         this.timeSignatureBeatsInput.value = this.score.timeSignature.beats;
         this.timeSignatureUnitInput.value  = this.score.timeSignature.unit;
         this.tempoUnitInput.value          = this.score.tempo.unit;
         this.tempoBpmInput.value           = this.score.tempo.bpm;
 
-        this.chordsTable.innerHTML = "";
+        const gridOutline = this.grid.querySelector("rect:first-child");
+        const gridX       = gridOutline.x.baseVal.value;
+        const gridY       = gridOutline.y.baseVal.value;
+        const gridWidth   = gridOutline.width.baseVal.value;
+        const gridHeight  = gridOutline.height.baseVal.value;
+        const barWidth    = gridWidth / this.score.width;
+        const barHeight   = gridHeight / this.score.height;
 
+        while (gridOutline.nextSibling) {
+            this.grid.removeChild(gridOutline.nextSibling);
+        }
+
+        // Add vertical lines.
+        for (let row = 1; row < this.score.height; row ++) {
+            const line = document.createElementNS(SVG_NS,"line");
+            line.setAttribute("x1", gridX);
+            line.setAttribute("y1", gridY + row * barHeight);
+            line.setAttribute("x2", gridX + gridWidth);
+            line.setAttribute("y2", gridY + row * barHeight);
+            this.grid.appendChild(line);
+        }
+
+        // Add horizontal lines.
+        for (let col = 1; col < this.score.width; col ++) {
+            const line = document.createElementNS(SVG_NS,"line");
+            line.setAttribute("x1", gridX + col * barWidth);
+            line.setAttribute("y1", gridY);
+            line.setAttribute("x2", gridX + col * barWidth);
+            line.setAttribute("y2", gridY + gridHeight);
+            this.grid.appendChild(line);
+        }
+
+        // Add chords.
         for (let row = 0; row < this.score.height; row ++) {
             for (let slotRow = 0; slotRow < 3; slotRow ++) {
-                const tr = document.createElement("tr");
                 for (let col = 0; col < this.score.width; col++) {
                     for (let slotCol = 0; slotCol < 3; slotCol ++) {
-                        const td = document.createElement("td");
-                        tr.appendChild(td);
-
                         if (slotCol === 0 && slotRow === 2 || slotCol === 2 && slotRow === 0) {
-                            td.classList.add("disabled");
                             continue;
                         }
 
-                        td.addEventListener("click", (_) => {
-                            this.controller.select(col, row, slotCol, slotRow);
-                        });
-
                         const chord = this.controller.getChordInSlot(col, row, slotCol, slotRow, true);
-                        if (!chord.isEmpty()) {
-                            td.innerHTML = chordToHTML(chord);
+                        if (chord.isEmpty()) {
+                            continue;
+                        }
+
+                        const chordText = chord.toText();
+
+                        const text = document.createElementNS(SVG_NS,"text");
+                        text.classList.add("chord");
+                        text.innerHTML = chordText.left;
+
+                        if (chordText.middle) {
+                            const tspan = document.createElementNS(SVG_NS, "tspan");
+                            tspan.classList.add("sup");
+                            tspan.setAttribute("dy", "-1ex")
+                            tspan.innerHTML = chordText.middle;
+                            text.appendChild(tspan);
+                        }
+
+                        if (chordText.right) {
+                            const tspan = document.createElementNS(SVG_NS, "tspan");
+                            tspan.setAttribute("dy", "1.25ex")
+                            tspan.innerHTML += chordText.right;
+                            text.appendChild(tspan);
+                        }
+
+                        const loc = TEXT_LOCATION[slotRow][slotCol];
+                        text.setAttribute("x", gridX + (col + loc.x) * barWidth);
+                        text.setAttribute("y", gridY + (row + loc.y) * barHeight);
+                        this.grid.appendChild(text);
+                    }
+                }
+            }
+        }
+
+        // Add mouse targets.
+        for (let row = 0; row < this.score.height; row ++) {
+            for (let slotRow = 0; slotRow < 3; slotRow ++) {
+                for (let col = 0; col < this.score.width; col++) {
+                    for (let slotCol = 0; slotCol < 3; slotCol ++) {
+                        const rect = document.createElementNS(SVG_NS,"rect");
+                        rect.setAttribute("x", gridX + col * barWidth + slotCol * barWidth / 3);
+                        rect.setAttribute("y", gridY + row * barHeight + slotRow * barHeight / 3);
+                        rect.setAttribute("width", barWidth / 3);
+                        rect.setAttribute("height", barHeight / 3);
+                        this.grid.appendChild(rect);
+
+                        rect.classList.add("slot");
+                        if (slotCol === 0 && slotRow === 2 || slotCol === 2 && slotRow === 0) {
+                            rect.classList.add("inactive");
                         }
                         else {
-                            td.innerHTML = "&nbsp;";
+                            rect.addEventListener("click", (_) => {
+                                this.controller.select(col, row, slotCol, slotRow);
+                            });
                         }
                     }
                 }
-                this.chordsTable.appendChild(tr);
             }
         }
 
@@ -79,12 +167,17 @@ export class ScoreView {
     }
 
     showSelection() {
-        this.chordsTable.querySelectorAll("td").forEach(td => td.classList.remove("selected"));
-        const trs = this.chordsTable.querySelectorAll("tr");
-        const selectedTr = trs[this.controller.selected.row * 3 + this.controller.selected.slotRow];
-        const tds = selectedTr.querySelectorAll("td");
-        const selectedTd = tds[this.controller.selected.col * 3 + this.controller.selected.slotCol];
-        selectedTd.classList.add("selected");
+        const slotIndex = (this.controller.selected.row * 3 + this.controller.selected.slotRow) * this.score.width * 3 +
+                          (this.controller.selected.col * 3 + this.controller.selected.slotCol);
+
+        this.grid.querySelectorAll("rect.slot").forEach((rect, index) => {
+            if (index === slotIndex) {
+                rect.classList.add("selected");
+            }
+            else {
+                rect.classList.remove("selected");
+            }
+        });
     }
 
     setEditable(editable) {
