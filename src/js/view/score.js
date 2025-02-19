@@ -3,21 +3,23 @@ const SVG_NS = "http://www.w3.org/2000/svg";
 
 const TEXT_LOCATION =  [
     [
-        {x: 1/4, y: 1/4},
-        {x: 1/2, y: 1/6},
-        {x: 0, y: 0} // Inactive
+        {x: 1/4, y: 1/4, width: 1/2, height: 1/2},
+        {x: 1/2, y: 1/6, width: 1, height: 1/3},
+        null
     ],
     [
-        {x: 1/6, y: 1/2},
-        {x: 1/2, y: 1/2},
-        {x: 5/6, y: 1/2}
+        {x: 1/6, y: 1/2, width: 1/3, height: 1/3},
+        {x: 1/2, y: 1/2, width: 1, height: 1},
+        {x: 5/6, y: 1/2, width: 1/3, height: 1/3}
     ],
     [
-        {x: 0, y: 0}, // Inactive
-        {x: 1/2, y: 5/6},
-        {x: 0.75, y: 0.75}
+        null,
+        {x: 1/2, y: 5/6, width: 1, height: 1/3},
+        {x: 0.75, y: 0.75, width: 1/2, height: 1/2}
     ]
 ];
+
+const TEXT_FACTOR = 0.9;
 
 export class ScoreView {
     constructor(score, container) {
@@ -128,10 +130,19 @@ export class ScoreView {
                             text.appendChild(tspan);
                         }
 
-                        const loc = TEXT_LOCATION[slotRow][slotCol];
-                        text.setAttribute("x", gridX + (col + loc.x) * barWidth);
-                        text.setAttribute("y", gridY + (row + loc.y) * barHeight);
+                        text.setAttribute("x", 0);
+                        text.setAttribute("y", 0);
                         this.grid.appendChild(text);
+
+                        const loc = TEXT_LOCATION[slotRow][slotCol];
+                        const dx = gridX + (col + loc.x) * barWidth;
+                        const dy = gridY + (row + loc.y) * barHeight;
+
+                        const textBBox = text.getBBox();
+                        const maxTextWidth = loc.width * barWidth * TEXT_FACTOR;
+                        const maxTextHeight = loc.height * barHeight * TEXT_FACTOR;
+                        const scaling = Math.min(maxTextWidth / textBBox.width, maxTextHeight / textBBox.height);
+                        text.setAttribute("transform", `translate(${dx}, ${dy}) scale(${scaling})`);
                     }
                 }
             }
