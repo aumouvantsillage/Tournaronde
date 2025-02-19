@@ -42,28 +42,28 @@ h1 {
     margin: 1rem auto;
 }
 
-.score-chords rect:first-child,
+.score-chords rect.outline,
 .score-chords line {
     fill: none;
     stroke: black;
     stroke-width: 2px;
 }
 
-.score-chords rect.slot {
+.score-chords .slot {
     fill: transparent;
     stroke: none;
 }
 
-.editable .score-chords rect.slot:not(.inactive):hover {
+.editable .score-chords .slot:not(.inactive):hover {
     fill: rgba(0, 0, 0, 10%);
     cursor: pointer;
 }
 
-.editable .score-chords rect.slot.selected {
+.editable .score-chords .slot.selected {
     fill: rgba(0, 0, 0, 15%);
 }
 
-.editable .score-chords rect.slot.selected:hover {
+.editable .score-chords .slot.selected:hover {
     fill: rgba(0, 0, 0, 20%);
 }
 

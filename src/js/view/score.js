@@ -63,7 +63,7 @@ export class ScoreView {
         this.tempoUnitInput.value          = this.score.tempo.unit;
         this.tempoBpmInput.value           = this.score.tempo.bpm;
 
-        const gridOutline = this.grid.querySelector("rect:first-child");
+        const gridOutline = this.grid.querySelector(".outline");
         const gridX       = gridOutline.x.baseVal.value;
         const gridY       = gridOutline.y.baseVal.value;
         const gridWidth   = gridOutline.width.baseVal.value;
@@ -153,19 +153,18 @@ export class ScoreView {
             for (let slotRow = 0; slotRow < 3; slotRow ++) {
                 for (let col = 0; col < this.score.width; col++) {
                     for (let slotCol = 0; slotCol < 3; slotCol ++) {
-                        const rect = document.createElementNS(SVG_NS,"rect");
-                        rect.setAttribute("x", gridX + col * barWidth + slotCol * barWidth / 3);
-                        rect.setAttribute("y", gridY + row * barHeight + slotRow * barHeight / 3);
-                        rect.setAttribute("width", barWidth / 3);
-                        rect.setAttribute("height", barHeight / 3);
-                        this.grid.appendChild(rect);
+                        const circ = document.createElementNS(SVG_NS,"circle");
+                        circ.setAttribute("cx", gridX + col * barWidth + slotCol * barWidth / 3 + barWidth / 6);
+                        circ.setAttribute("cy", gridY + row * barHeight + slotRow * barHeight / 3 + barWidth / 6);
+                        circ.setAttribute("r", barWidth / 6);
+                        this.grid.appendChild(circ);
 
-                        rect.classList.add("slot");
+                        circ.classList.add("slot");
                         if (slotCol === 0 && slotRow === 2 || slotCol === 2 && slotRow === 0) {
-                            rect.classList.add("inactive");
+                            circ.classList.add("inactive");
                         }
                         else {
-                            rect.addEventListener("click", (_) => {
+                            circ.addEventListener("click", (_) => {
                                 this.controller.select(col, row, slotCol, slotRow);
                             });
                         }
@@ -181,12 +180,12 @@ export class ScoreView {
         const slotIndex = (this.controller.selected.row * 3 + this.controller.selected.slotRow) * this.score.width * 3 +
                           (this.controller.selected.col * 3 + this.controller.selected.slotCol);
 
-        this.grid.querySelectorAll("rect.slot").forEach((rect, index) => {
+        this.grid.querySelectorAll(".slot").forEach((slot, index) => {
             if (index === slotIndex) {
-                rect.classList.add("selected");
+                slot.classList.add("selected");
             }
             else {
-                rect.classList.remove("selected");
+                slot.classList.remove("selected");
             }
         });
     }
