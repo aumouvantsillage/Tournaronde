@@ -1,4 +1,6 @@
 
+@import "fonts.css";
+
 body {
     font-family: "Noto Sans";
     font-size: 12pt;
@@ -49,6 +51,10 @@ h1 {
     stroke-width: 2px;
 }
 
+.score-chords line.diagonal {
+    stroke-width: 1px;
+}
+
 .score-chords .slot {
     fill: transparent;
     stroke: none;
@@ -68,14 +74,23 @@ h1 {
 }
 
 .score-chords text.chord {
+    font-family: "MuseJazzText";
     text-align: center;
     text-anchor: middle;
+}
+
+.score-chords text.chord tspan {
     dominant-baseline: central;
 }
 
 .score-chords text.chord .sup {
     /* vertical-align: 25%; Does not work in Firefox */
     font-size: 75%;
+}
+
+rect.debug {
+    display: none;
+    fill: rgba(255, 0, 0, 15%);
 }
 
 .grid-properties,

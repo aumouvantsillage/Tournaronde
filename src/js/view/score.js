@@ -1,25 +1,51 @@
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 
-const TEXT_LOCATION =  [
+const DIAGONALS = [
     [
-        {x: 1/4, y: 1/4, width: 1/2, height: 1/2},
-        {x: 1/2, y: 1/6, width: 1, height: 1/3},
+        {primary: true, topLeft: false},
+        {primary: true, topLeft: true},
         null
     ],
     [
-        {x: 1/6, y: 1/2, width: 1/3, height: 1/3},
-        {x: 1/2, y: 1/2, width: 1, height: 1},
-        {x: 5/6, y: 1/2, width: 1/3, height: 1/3}
+        {primary: true, topLeft: true},
+        {primary: false, topLeft: false, bottomRight: false},
+        {primary: true, bottomRight: true}
     ],
     [
         null,
-        {x: 1/2, y: 5/6, width: 1, height: 1/3},
-        {x: 0.75, y: 0.75, width: 1/2, height: 1/2}
+        {primary: true, bottomRight: true},
+        {primary: true, bottomRight: false}
     ]
 ];
 
-const TEXT_FACTOR = 0.9;
+const CHORD_SCALING_FACTOR = 0.85;
+const CHORD_TRANSLATION_SCALING_FACTOR = (2 - CHORD_SCALING_FACTOR) / 2;
+const CHORD_EXPONENT_SIZE = 0.75;
+
+function addSVGElement(parent, eltType, attrs, content=null) {
+    const elt = document.createElementNS(SVG_NS, eltType);
+    for (const [key, val] of Object.entries(attrs)) {
+        elt.setAttribute(key, val);   
+    }
+    if (content !== null) {
+        elt.innerHTML = content;
+    }
+    parent.appendChild(elt);
+    return elt;
+}
+
+// Based on https://stackoverflow.com/a/77729969
+function getTextSize(text) {
+    const ctx = document.createElement("canvas").getContext("2d");
+    //ctx.font = `${text.style.fontSize} ${text.style.fontFamily}`;
+    ctx.font = "12pt MuseJazzText";
+    const metrics = ctx.measureText(text.textContent);
+    return {
+        width: metrics.actualBoundingBoxRight - metrics.actualBoundingBoxLeft,
+        height: metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent
+    };
+}
 
 export class ScoreView {
     constructor(score, container) {
@@ -77,73 +103,163 @@ export class ScoreView {
 
         // Add vertical lines.
         for (let row = 1; row < this.score.height; row ++) {
-            const line = document.createElementNS(SVG_NS,"line");
-            line.setAttribute("x1", gridX);
-            line.setAttribute("y1", gridY + row * barHeight);
-            line.setAttribute("x2", gridX + gridWidth);
-            line.setAttribute("y2", gridY + row * barHeight);
-            this.grid.appendChild(line);
+            addSVGElement(this.grid, "line", {
+                x1: gridX,
+                y1: gridY + row * barHeight,
+                x2: gridX + gridWidth,
+                y2: gridY + row * barHeight
+            });
         }
 
         // Add horizontal lines.
         for (let col = 1; col < this.score.width; col ++) {
-            const line = document.createElementNS(SVG_NS,"line");
-            line.setAttribute("x1", gridX + col * barWidth);
-            line.setAttribute("y1", gridY);
-            line.setAttribute("x2", gridX + col * barWidth);
-            line.setAttribute("y2", gridY + gridHeight);
-            this.grid.appendChild(line);
+            addSVGElement(this.grid, "line", {
+                x1: gridX + col * barWidth,
+                y1: gridY,
+                x2: gridX + col * barWidth,
+                y2: gridY + gridHeight
+            });
         }
+
+        const xText = addSVGElement(this.grid, "text", {}, "x");
+        const xSize = getTextSize(xText);
 
         // Add chords.
         for (let row = 0; row < this.score.height; row ++) {
-            for (let slotRow = 0; slotRow < 3; slotRow ++) {
-                for (let col = 0; col < this.score.width; col++) {
-                    for (let slotCol = 0; slotCol < 3; slotCol ++) {
-                        if (slotCol === 0 && slotRow === 2 || slotCol === 2 && slotRow === 0) {
-                            continue;
-                        }
+            const cellY = gridY + row * barHeight;
 
+            for (let col = 0; col < this.score.width; col++) {
+                const cellX = gridX + col * barWidth;
+
+                let diagonals = {};
+
+                for (let slotRow = 0; slotRow < 3; slotRow ++) {
+                    const slotColMin = slotRow === 2 ? 1 : 0;
+                    const slotColMax = slotRow === 0 ? 1 : 2;
+
+                    for (let slotCol = slotColMin; slotCol <= slotColMax; slotCol ++) {
                         const chord = this.controller.getChordInSlot(col, row, slotCol, slotRow, true);
                         if (chord.isEmpty()) {
                             continue;
                         }
 
+                        diagonals = {...diagonals, ...DIAGONALS[slotRow][slotCol]};
+
                         const chordText = chord.toText();
 
-                        const text = document.createElementNS(SVG_NS,"text");
-                        text.classList.add("chord");
-                        text.innerHTML = chordText.left;
+                        const text = addSVGElement(this.grid, "text", {class: "chord", x: 0, y: 0});
+                        const tspan = addSVGElement(text, "tspan", {}, chordText.left);
+                        let textSize = getTextSize(tspan);
 
                         if (chordText.middle) {
-                            const tspan = document.createElementNS(SVG_NS, "tspan");
-                            tspan.classList.add("sup");
-                            tspan.setAttribute("dy", "-1ex")
-                            tspan.innerHTML = chordText.middle;
-                            text.appendChild(tspan);
+                            const tspan = addSVGElement(text, "tspan", {class: "sup", dy: "-1ex"}, chordText.middle);
+                            const tspanSize = getTextSize(tspan);
+                            textSize.width += tspanSize.width * CHORD_EXPONENT_SIZE;
+                            textSize.height = Math.max(textSize.height, tspanSize.height * CHORD_EXPONENT_SIZE + xSize.height);
                         }
 
                         if (chordText.right) {
-                            const tspan = document.createElementNS(SVG_NS, "tspan");
-                            tspan.setAttribute("dy", "1.25ex")
-                            tspan.innerHTML += chordText.right;
-                            text.appendChild(tspan);
+                            const dy = chordText.middle ? "1.5ex" : "0.5ex";
+                            const tspan = addSVGElement(text, "tspan", {dy}, chordText.right);
+                            const tspanSize = getTextSize(tspan);
+                            textSize.width += tspanSize.width;
+                            textSize.height += xSize.height;
                         }
 
-                        text.setAttribute("x", 0);
-                        text.setAttribute("y", 0);
-                        this.grid.appendChild(text);
+                        let tx = cellX;
+                        let ty = cellY;
+                        if (chordText.right) {
+                            ty -= xSize.height / 2;
+                        }
+                        let scaling;
+                        if (slotCol === slotRow) {
+                            if (slotCol === 1) {
+                                scaling = Math.min(
+                                    barWidth / textSize.width,
+                                    barHeight / textSize.height
+                                );
+                                tx += barWidth / 2;
+                                ty += barHeight / 2;
+                            }
+                            else {
+                                scaling = (barWidth + barHeight) / (textSize.width + textSize.height) / 2;
+                                if (slotCol === 0) {
+                                    tx += textSize.width  * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                    ty += textSize.height * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                }
+                                else {
+                                    tx += barWidth  - textSize.width  * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                    ty += barHeight - textSize.height * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                }
+                            }
+                        }
+                        else {
+                            if (slotCol === 1) {
+                                scaling = barWidth / (textSize.width + textSize.height * 2);
+                                tx += barWidth / 2;
+                                if (slotRow === 0) {
+                                    ty += textSize.height * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                }
+                                else {
+                                    ty += barHeight - textSize.height * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                }
+                            }
+                            if (slotRow === 1) {
+                                scaling = barHeight / (textSize.width * 2 + textSize.height);
+                                ty += barHeight / 2;
+                                if (slotCol === 0) {
+                                    tx += textSize.width * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                }
+                                else {
+                                    tx += barWidth - textSize.width * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                }
+                            }
+                        }
 
-                        const loc = TEXT_LOCATION[slotRow][slotCol];
-                        const dx = gridX + (col + loc.x) * barWidth;
-                        const dy = gridY + (row + loc.y) * barHeight;
+                        text.setAttribute("transform", `translate(${tx}, ${ty}) scale(${scaling * CHORD_SCALING_FACTOR})`);
 
-                        const textBBox = text.getBBox();
-                        const maxTextWidth = loc.width * barWidth * TEXT_FACTOR;
-                        const maxTextHeight = loc.height * barHeight * TEXT_FACTOR;
-                        const scaling = Math.min(maxTextWidth / textBBox.width, maxTextHeight / textBBox.height);
-                        text.setAttribute("transform", `translate(${dx}, ${dy}) scale(${scaling})`);
+                        const rectDebug = addSVGElement(this.grid, "rect", {
+                            class: "debug",
+                            x: -textSize.width / 2,
+                            y: -textSize.height / 2,
+                            width: textSize.width,
+                            height: textSize.height
+                        });
+                        if (chordText.right) {
+                            ty += xSize.height / 2;
+                        }
+                        rectDebug.setAttribute("transform", `translate(${tx}, ${ty}) scale(${scaling * CHORD_SCALING_FACTOR})`);
                     }
+                }
+
+                if (diagonals.primary) {
+                    addSVGElement(this.grid, "line", {
+                        class: "diagonal",
+                        x1: cellX,
+                        y1: cellY + barHeight,
+                        x2: cellX + barWidth,
+                        y2: cellY
+                    });
+                }
+
+                if (diagonals.topLeft) {
+                    addSVGElement(this.grid, "line", {
+                        class: "diagonal",
+                        x1: cellX,
+                        y1: cellY,
+                        x2: cellX + barWidth / 2,
+                        y2: cellY + barHeight / 2
+                    });
+                }
+
+                if (diagonals.bottomRight) {
+                    addSVGElement(this.grid, "line", {
+                        class: "diagonal",
+                        x1: cellX + barWidth,
+                        y1: cellY + barHeight,
+                        x2: cellX + barWidth / 2,
+                        y2: cellY + barHeight / 2
+                    });
                 }
             }
         }
@@ -153,13 +269,13 @@ export class ScoreView {
             for (let slotRow = 0; slotRow < 3; slotRow ++) {
                 for (let col = 0; col < this.score.width; col++) {
                     for (let slotCol = 0; slotCol < 3; slotCol ++) {
-                        const circ = document.createElementNS(SVG_NS,"circle");
-                        circ.setAttribute("cx", gridX + col * barWidth + slotCol * barWidth / 3 + barWidth / 6);
-                        circ.setAttribute("cy", gridY + row * barHeight + slotRow * barHeight / 3 + barWidth / 6);
-                        circ.setAttribute("r", barWidth / 6);
-                        this.grid.appendChild(circ);
+                        const circ = addSVGElement(this.grid, "circle", {
+                            class: "slot",
+                            cx: gridX + col * barWidth + slotCol * barWidth / 3 + barWidth / 6,
+                            cy: gridY + row * barHeight + slotRow * barHeight / 3 + barWidth / 6,
+                            r: barWidth / 6
+                        });
 
-                        circ.classList.add("slot");
                         if (slotCol === 0 && slotRow === 2 || slotCol === 2 && slotRow === 0) {
                             circ.classList.add("inactive");
                         }
