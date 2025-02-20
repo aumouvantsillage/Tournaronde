@@ -23,6 +23,8 @@ const CHORD_SCALING_FACTOR = 0.85;
 const CHORD_TRANSLATION_SCALING_FACTOR = (2 - CHORD_SCALING_FACTOR) / 2;
 const CHORD_EXPONENT_SIZE = 0.75;
 
+const TEMPO_UNIT_TO_HTML = ["&#119133;", "&#119134;", "&#119135;", "&#119136;", "&#119137;" ]
+
 function addSVGElement(parent, eltType, attrs, content=null) {
     const elt = document.createElementNS(SVG_NS, eltType);
     for (const [key, val] of Object.entries(attrs)) {
@@ -37,9 +39,9 @@ function addSVGElement(parent, eltType, attrs, content=null) {
 
 // Based on https://stackoverflow.com/a/77729969
 function getTextSize(text) {
+    const textStyle = window.getComputedStyle(text);
     const ctx = document.createElement("canvas").getContext("2d");
-    //ctx.font = `${text.style.fontSize} ${text.style.fontFamily}`;
-    ctx.font = "12pt MuseJazzText";
+    ctx.font = `${textStyle.fontSize} ${textStyle.fontFamily}`;
     const metrics = ctx.measureText(text.textContent);
     return {
         width: metrics.actualBoundingBoxRight - metrics.actualBoundingBoxLeft,
@@ -53,13 +55,13 @@ export class ScoreView {
         this.controller              = null;
         this.container               = container;
 
-        this.editButton              = container.querySelector("button[name='score-editable']");
+        this.editButton              = container.querySelector(".score-editable");
         this.widthInput              = container.querySelector("input[name='score-width']");
         this.heightInput             = container.querySelector("input[name='score-height']");
         this.titleHeading            = container.querySelector(".score-title");
         this.timeSignatureBeatsInput = container.querySelector("input[name='score-time-signature-beats']");
         this.timeSignatureUnitInput  = container.querySelector("input[name='score-time-signature-unit']");
-        this.tempoUnitInput          = container.querySelector("select[name='score-tempo-unit']");
+        this.tempoUnitInput          = container.querySelector(".score-tempo-unit");
         this.tempoBpmInput           = container.querySelector("input[name='score-tempo-bpm']");
         this.grid                    = container.querySelector(".score-chords svg");
     }
@@ -78,17 +80,28 @@ export class ScoreView {
         this.heightInput.addEventListener("change", (_) => {
             this.controller.setScoreHeight(parseInt(this.heightInput.value));
         });
+
+        this.tempoUnitInput.addEventListener("click", (_) => {
+            if (this.controller.editable) {
+                this.controller.setNextTempoUnit();
+            }
+        });
+
+        // TODO tempo unit as multi-state button
+        // TODO title heading, time signature, tempo
     }
 
-    redraw() {
+    redrawScoreProperties() {
         this.widthInput.value              = this.score.width;
         this.heightInput.value             = this.score.height;
         this.titleHeading.innerHTML        = this.score.title;
         this.timeSignatureBeatsInput.value = this.score.timeSignature.beats;
         this.timeSignatureUnitInput.value  = this.score.timeSignature.unit;
-        this.tempoUnitInput.value          = this.score.tempo.unit;
+        this.tempoUnitInput.innerHTML      = TEMPO_UNIT_TO_HTML[this.score.tempo.unit];
         this.tempoBpmInput.value           = this.score.tempo.bpm;
+    }
 
+    redraw() {
         const gridOutline = this.grid.querySelector(".outline");
         const gridX       = gridOutline.x.baseVal.value;
         const gridY       = gridOutline.y.baseVal.value;
@@ -314,7 +327,6 @@ export class ScoreView {
             this.heightInput.removeAttribute("disabled");
             this.timeSignatureBeatsInput.removeAttribute("disabled");
             this.timeSignatureUnitInput.removeAttribute("disabled");
-            this.tempoUnitInput.removeAttribute("disabled");
             this.tempoBpmInput.removeAttribute("disabled");
         }
         else {
@@ -324,7 +336,6 @@ export class ScoreView {
             this.heightInput.setAttribute("disabled", true);
             this.timeSignatureBeatsInput.setAttribute("disabled", true);
             this.timeSignatureUnitInput.setAttribute("disabled", true);
-            this.tempoUnitInput.setAttribute("disabled", true);
             this.tempoBpmInput.setAttribute("disabled", true);
         }
     }

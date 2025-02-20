@@ -5,7 +5,7 @@
 <script type="module" src="../js/editor.js"></script>
 
 <div class="score-view">
-    <button name="score-editable">Edit</button>
+    <div class="score-editable">Edit</div>
 
     <h1 class="score-title"></h1>
 
@@ -17,13 +17,7 @@
         </div>
 
         <div class="score-tempo">
-            <select name="score-tempo-unit">
-                <option value="1">a &#119133;</option>
-                <option value="2">b &#119134;</option>
-                <option value="4">c &#119135;</option>
-                <option value="8">d &#119136;</option>
-                <option value="16">e &#119137;</option>
-            </select>
+            <span class="score-tempo-unit">&#119135;</span>
             &nbsp;=&nbsp;
             <input type="number" min="1" name="score-tempo-bpm">
         </div>

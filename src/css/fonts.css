@@ -1,0 +1,10 @@
+
+@font-face {
+    font-family: "MuseJazz";
+    src: url("../../assets/fonts/MuseJazz.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "MuseJazzText";
+    src: url("../../assets/fonts/MuseJazzText.otf") format("opentype");
+}

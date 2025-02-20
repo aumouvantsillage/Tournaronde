@@ -2,11 +2,15 @@
 @import "fonts.css";
 
 body {
-    font-family: "Noto Sans";
-    font-size: 12pt;
+    font-family: "MuseJazzText";
+    font-size: 14pt;
 }
 
-button[name='score-editable'] {
+/* -------------------------------------------------------------------------- *
+ * Score properties.
+ * -------------------------------------------------------------------------- */
+
+.score-editable {
     background-color: transparent;
     padding: 0.5em 1em;
     border: 2px solid black;
@@ -14,9 +18,10 @@ button[name='score-editable'] {
     position: absolute;
     left: 1em;
     top: 1em;
+    cursor: default;
 }
 
-.editable button[name='score-editable'] {
+.editable .score-editable {
     background-color: rgb(220, 220, 220);
 }
 
@@ -38,6 +43,62 @@ h1 {
     display: inline-block;
     margin: 0 2em;
 }
+
+.grid-properties,
+.palette-view {
+    display: none;
+}
+
+.editable .grid-properties {
+    display: block;
+}
+
+.palette-view.editable {
+    display: table;
+    margin: 1em auto;
+}
+
+.score-tempo-unit,
+input[type=number] {
+    font-family: "MuseJazzText";
+    font-size: 18pt;
+}
+
+.editable .score-tempo-unit {
+    padding: 0 0.5em;
+}
+
+.editable .score-tempo-unit,
+input[type='number'] {
+    border: 1px solid black;
+    border-radius: 0.5em;
+}
+
+input[type='number'] {
+    text-align: center;
+    width: 3em;
+}
+
+input[type='number'][disabled] {
+    -moz-appearance: textfield;
+    border: none;
+    color: black;
+}
+
+input[name='score-time-signature-beats'][disabled],
+input[name='score-width'][disabled] {
+    text-align: right;
+}
+
+input[name='score-time-signature-unit'][disabled],
+input[name='score-tempo-bpm'][disabled],
+input[name='score-height'][disabled] {
+    text-align: left;
+}
+
+/* -------------------------------------------------------------------------- *
+ * Score view.
+ * -------------------------------------------------------------------------- */
 
 .score-chords svg {
     display: table;
@@ -91,47 +152,5 @@ h1 {
 rect.debug {
     display: none;
     fill: rgba(255, 0, 0, 15%);
-}
-
-.grid-properties,
-.palette-view {
-    display: none;
-}
-
-.editable .grid-properties {
-    display: block;
-}
-
-.palette-view.editable {
-    display: table;
-    margin: 1em auto;
-}
-
-.score-properties *,
-.grid-properties *,
-.palette-view * {
-    font-size: 120%;
-}
-
-input[type='number'] {
-    text-align: center;
-    width: 3em;
-}
-
-input[type='number'][disabled] {
-    -moz-appearance: textfield;
-    border: none;
-    color: black;
-}
-
-input[name='score-time-signature-beats'][disabled],
-input[name='score-width'][disabled] {
-    text-align: right;
-}
-
-input[name='score-time-signature-unit'][disabled],
-input[name='score-tempo-bpm'][disabled],
-input[name='score-height'][disabled] {
-    text-align: left;
 }
 

@@ -40,6 +40,7 @@ export class Controller {
             slotRow: 1
         };
 
+        this.scoreView.redrawScoreProperties();
         this.scoreView.redraw();
         this.paletteView.showSelection();
     }
@@ -61,13 +62,22 @@ export class Controller {
 
     setScoreWidth(width) {
         this.score.setWidth(width);
+        this.scoreView.redrawScoreProperties();
         this.scoreView.redraw();
         this.save();
     }
 
     setScoreHeight(height) {
         this.score.setHeight(height);
+        this.scoreView.redrawScoreProperties();
         this.scoreView.redraw();
+        this.save();
+    }
+
+    setNextTempoUnit() {
+        console.log(this.score.tempo);
+        this.score.setTempoUnit(this.score.tempo.unit + 1);
+        this.scoreView.redrawScoreProperties();
         this.save();
     }
 

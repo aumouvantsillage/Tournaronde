@@ -5,7 +5,9 @@ const DEFAULT_WIDTH          = 4
 const DEFAULT_HEIGHT         = 4
 const DEFAULT_TITLE          = "New Score";
 const DEFAULT_TIME_SIGNATURE = {beats: 4, unit: 4};
-const DEFAULT_TEMPO          = {unit: 4, bpm: 120};
+const DEFAULT_TEMPO          = {unit: 3, bpm: 120};
+
+const TEMPO_COUNT            = 5
 
 const CHORDS_PER_BAR         = 4
 
@@ -61,6 +63,10 @@ export class Score {
             this.height = height;
             this.resize();
         }
+    }
+
+    setTempoUnit(unit) {
+        this.tempo.unit = unit % TEMPO_COUNT;
     }
 
     getChordsInBar(col, row) {
