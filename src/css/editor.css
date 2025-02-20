@@ -66,6 +66,7 @@ input[type=number] {
 
 .editable .score-tempo-unit {
     padding: 0 0.5em;
+    cursor: pointer;
 }
 
 .editable .score-tempo-unit,
@@ -94,6 +95,34 @@ input[name='score-time-signature-unit'][disabled],
 input[name='score-tempo-bpm'][disabled],
 input[name='score-height'][disabled] {
     text-align: left;
+}
+
+/* -------------------------------------------------------------------------- *
+ * Palette.
+ * -------------------------------------------------------------------------- */
+
+.palette-group {
+    display: table;
+    margin: 0 auto;
+    border-collapse: separate;
+    border-spacing: 0.25em;
+}
+
+.palette-row {
+    display: table-cell;
+}
+
+.palette-item {
+    display: table-cell;
+    vertical-align: middle;
+    border: 1px solid black;
+    border-radius: 0.5em;
+    padding: 0.5em 1em;
+    cursor: pointer;
+}
+
+.palette-item.active {
+    background-color: rgb(220, 220, 220);
 }
 
 /* -------------------------------------------------------------------------- *

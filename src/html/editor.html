@@ -38,79 +38,68 @@
 </div>
 
 <div class="palette-view">
-    <span>
-        <select name="palette-root-note">
-            <option value="none">&mdash;</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="G">G</option>
-        </select>&nbsp;
-        <select name="palette-root-alt">
-            <option value="natural">&natur;</option>
-            <option value="flat">&flat;</option>
-            <option value="sharp">&sharp;</option>
-        </select>
-    </span>
-    <span>
-        <select name="palette-quality">
-            <option value="major">Major</option>
-            <option value="minor">Minor</option>
-            <option value="sus2">Sus 2</option>
-            <option value="sus4">Sus 4</option>
-            <option value="no3">No 3rd</option>
-        </select>
-    </span>
-    <span>
-        <select name="palette-fifth">
-            <option value="natural">&natur;5</option>
-            <option value="flat">&flat;5</option>
-            <option value="sharp">&sharp;5</option>
-        </select>
-    </span>
-    <span>
-        <select name="palette-extension">
-            <option value="none">&mdash;</option>
-            <option value="6">6</option>
-            <option value="dim7">dim7 (implies &flat;5)</option>
-            <option value="7">7</option>
-            <option value="M7">M7</option>
-            <option value="9">9</option>
-            <option value="M9">M9</option>
-            <option value="11">11</option>
-            <option value="M11">M11</option>
-            <option value="13">13</option>
-            <option value="M13">M13</option>
-        </select>
-    </span>
-    <span>
-        <select name="palette-addition">
-            <option value="none">&mdash;</option>
-            <option value="2">add2</option>
-            <option value="4">add4</option>
-            <option value="6">add6</option>
-        </select>
-    </span>
-    &nbsp;/&nbsp;
-    <span>
-        <select name="palette-bass-note">
-            <option value="none">&mdash;</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-            <option value="E">E</option>
-            <option value="F">F</option>
-            <option value="G">G</option>
-        </select>&nbsp;
-        <select name="palette-bass-alt">
-            <option value="natural">&natur;</option>
-            <option value="flat">&flat;</option>
-            <option value="sharp">&sharp;</option>
-        </select>
-    </span>
+    <div class="palette-group">
+        <div class="palette-root-note palette-row">
+            <div class="palette-item" data-value="A">A</div>
+            <div class="palette-item" data-value="B">B</div>
+            <div class="palette-item" data-value="C">C</div>
+            <div class="palette-item" data-value="D">D</div>
+            <div class="palette-item" data-value="E">E</div>
+            <div class="palette-item" data-value="F">F</div>
+            <div class="palette-item" data-value="G">G</div>
+        </div>
+        <div class="palette-root-alt palette-row">
+            <div class="palette-item" data-value="flat">&flat;</div>
+            <div class="palette-item" data-value="sharp">&sharp;</div>
+        </div>
+    </div>
+    <div class="palette-group">
+        <div class="palette-quality palette-row">
+            <div class="palette-item" data-value="minor">Minor</div>
+            <div class="palette-item" data-value="sus2">Sus 2</div>
+            <div class="palette-item" data-value="sus4">Sus 4</div>
+            <div class="palette-item" data-value="no3">No 3rd</div>
+        </div>
+        <div class="palette-fifth palette-row">
+            <div class="palette-item" data-value="flat">&flat;5</div>
+            <div class="palette-item" data-value="sharp">&sharp;5</div>
+        </div>
+    </div>
+    <div class="palette-group">
+        <div class="palette-extension palette-row">
+            <div class="palette-item" data-value="6">6</div>
+            <div class="palette-item" data-value="dim7" title="Implies &flat;5">dim7</div>
+            <div class="palette-item" data-value="7">7</div>
+            <div class="palette-item" data-value="M7">M7</div>
+            <div class="palette-item" data-value="9">9</div>
+            <div class="palette-item" data-value="M9">M9</div>
+            <div class="palette-item" data-value="11">11</div>
+            <div class="palette-item" data-value="M11">M11</div>
+            <div class="palette-item" data-value="13">13</div>
+            <div class="palette-item" data-value="M13">M13</div>
+        </div>
+    </div>
+    <div class="palette-group">
+        <div class="palette-addition palette-row">
+            <div class="palette-item" data-value="2">Add 2</div>
+            <div class="palette-item" data-value="4">Add 4</div>
+            <div class="palette-item" data-value="6">Add 6</div>
+        </div>
+    </div>
+    <div class="palette-group">
+        <div class="palette-bass-note palette-row">
+            <div class="palette-item" data-value="A">/&nbsp;A</div>
+            <div class="palette-item" data-value="B">/&nbsp;B</div>
+            <div class="palette-item" data-value="C">/&nbsp;C</div>
+            <div class="palette-item" data-value="D">/&nbsp;D</div>
+            <div class="palette-item" data-value="E">/&nbsp;E</div>
+            <div class="palette-item" data-value="F">/&nbsp;F</div>
+            <div class="palette-item" data-value="G">/&nbsp;G</div>
+        </div>
+        <div class="palette-bass-alt palette-row">
+            <div class="palette-item" data-value="flat">&flat;</div>
+            <div class="palette-item" data-value="sharp">&sharp;</div>
+        </div>
+    </div>
 </div>
 

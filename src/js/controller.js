@@ -106,16 +106,28 @@ export class Controller {
         this.paletteView.showSelection();
     }
 
-    updateSelectedChord(rootNote, rootAlt, quality, fifth, extension, addition, bassNote, bassAlt) {
+    updateSelectedChord(key, value) {
+        function toggle(prev, deflt) {
+            if (prev !== value) {
+                return value;
+            }
+            return deflt;
+        }
         const chords = this.score.getChordsInBar(this.selected.col, this.selected.row);
         const [eqLeft, eqRight, neLeft, neRight] = CHORD_MAPPING[this.selected.slotRow][this.selected.slotCol];
         for (let i = eqLeft; i < eqRight; i ++) {
-            chords[i].copy({
-                rootNote: [rootNote, rootAlt],
-                quality, fifth, extension, addition,
-                bassNote: [bassNote, bassAlt]
-            });
+            const c = chords[i];
+            switch (key) {
+                case "rootNote": c.rootNote[0] = toggle(c.rootNote[0], "none");    break;
+                case "rootAlt":  c.rootNote[1] = toggle(c.rootNote[1], "natural"); break;
+                case "quality":  c.quality     = toggle(c.quality,     "major");   break;
+                case "bassNote": c.bassNote[0] = toggle(c.bassNote[0], "none");    break;
+                case "bassAlt":  c.bassNote[1] = toggle(c.bassNote[1], "natural"); break;
+                case "fifth":    c.fifth       = toggle(c.fifth,       "natural"); break;
+                default:         c[key]        = toggle(c[key],        "none");
+            }
         }
+        this.paletteView.showSelection();
         this.scoreView.redraw();
         this.save();
     }

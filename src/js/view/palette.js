@@ -5,50 +5,58 @@ export class PaletteView {
         this.controller     = null;
         this.container      = container;
 
-        this.rootNoteInput  = container.querySelector("select[name = 'palette-root-note']");
-        this.rootAltInput   = container.querySelector("select[name = 'palette-root-alt']");
-        this.qualityInput   = container.querySelector("select[name = 'palette-quality']");
-        this.fifthInput     = container.querySelector("select[name = 'palette-fifth']");
-        this.extensionInput = container.querySelector("select[name = 'palette-extension']");
-        this.additionInput  = container.querySelector("select[name = 'palette-addition']");
-        this.bassNoteInput  = container.querySelector("select[name = 'palette-bass-note']");
-        this.bassAltInput   = container.querySelector("select[name = 'palette-bass-alt']");
+        this.rootNoteItems  = container.querySelectorAll(".palette-root-note .palette-item");
+        this.rootAltItems   = container.querySelectorAll(".palette-root-alt .palette-item");
+        this.qualityItems   = container.querySelectorAll(".palette-quality .palette-item");
+        this.fifthItems     = container.querySelectorAll(".palette-fifth .palette-item");
+        this.extensionItems = container.querySelectorAll(".palette-extension .palette-item");
+        this.additionItems  = container.querySelectorAll(".palette-addition .palette-item");
+        this.bassNoteItems  = container.querySelectorAll(".palette-bass-note .palette-item");
+        this.bassAltItems   = container.querySelectorAll(".palette-bass-alt .palette-item");
+    }
+
+    addClickHandler(items, key) {
+        items.forEach(elt => {
+            elt.addEventListener("click", (_) => {
+                this.controller.updateSelectedChord(key, elt.dataset.value);
+            })
+        });
     }
 
     setController(controller) {
         this.controller = controller;
+        this.addClickHandler(this.rootNoteItems, "rootNote");
+        this.addClickHandler(this.rootAltItems, "rootAlt");
+        this.addClickHandler(this.qualityItems, "quality");
+        this.addClickHandler(this.fifthItems, "fifth");
+        this.addClickHandler(this.extensionItems, "extension");
+        this.addClickHandler(this.additionItems, "addition");
+        this.addClickHandler(this.bassNoteItems, "bassNote");
+        this.addClickHandler(this.bassAltItems, "bassAlt");
+    }
 
-        const updateSelectedChord = (_) => this.controller.updateSelectedChord(
-            this.rootNoteInput.value,
-            this.rootAltInput.value,
-            this.qualityInput.value,
-            this.fifthInput.value,
-            this.extensionInput.value,
-            this.additionInput.value,
-            this.bassNoteInput.value,
-            this.bassAltInput.value
-        );
-
-        this.rootNoteInput.addEventListener("change", updateSelectedChord);
-        this.rootAltInput.addEventListener("change", updateSelectedChord);
-        this.qualityInput.addEventListener("change", updateSelectedChord);
-        this.fifthInput.addEventListener("change", updateSelectedChord);
-        this.extensionInput.addEventListener("change", updateSelectedChord);
-        this.additionInput.addEventListener("change", updateSelectedChord);
-        this.bassNoteInput.addEventListener("change", updateSelectedChord);
-        this.bassAltInput.addEventListener("change", updateSelectedChord);
+    updateRow(items, value) {
+        items.forEach(it => {
+            if (it.dataset.value === value) {
+                it.classList.add("active");
+            }
+            else {
+                it.classList.remove("active");
+            }
+        });
     }
 
     showSelection() {
         const chord = this.controller.getSelectedChord();
-        this.rootNoteInput.value  = chord.rootNote[0];
-        this.rootAltInput.value   = chord.rootNote[1];
-        this.qualityInput.value   = chord.quality;
-        this.fifthInput.value     = chord.fifth;
-        this.extensionInput.value = chord.extension;
-        this.additionInput.value  = chord.addition;
-        this.bassNoteInput.value  = chord.bassNote[0];
-        this.bassAltInput.value   = chord.bassNote[1];
+
+        this.updateRow(this.rootNoteItems, chord.rootNote[0]);
+        this.updateRow(this.rootAltItems, chord.rootNote[1]);
+        this.updateRow(this.qualityItems, chord.quality);
+        this.updateRow(this.fifthItems, chord.fifth);
+        this.updateRow(this.extensionItems, chord.extension);
+        this.updateRow(this.additionItems, chord.addition);
+        this.updateRow(this.bassNoteItems, chord.bassNote[0]);
+        this.updateRow(this.bassAltItems, chord.bassNote[1]);
     }
 
     setEditable(editable) {
