@@ -16,14 +16,13 @@ body {
     height: 100vh;
 }
 
-.top {
+.score-view {
     flex-shrink: 1;
     overflow-y: scroll;
 }
 
-.bottom {
+.palette-view {
     flex-shrink: 0;
-    overflow: hidden;
 }
 
 /* -------------------------------------------------------------------------- *

@@ -4,103 +4,99 @@
 <link rel="stylesheet" type="text/css" href="../css/editor.css">
 <script type="module" src="../js/editor.js"></script>
 
-<div class="top">
-    <div class="score-view">
-        <div class="score-editable">Edit</div>
+<div class="score-view">
+    <div class="score-editable">Edit</div>
 
-        <h1 class="score-title"></h1>
+    <h1 class="score-title"></h1>
 
-        <div class="score-properties">
-            <div class="score-time-signature">
-                <input type="number" min="1" name="score-time-signature-beats">
-                &nbsp;/&nbsp;
-                <input type="number" min="1" name="score-time-signature-unit">
-            </div>
-
-            <div class="score-tempo">
-                <span class="score-tempo-unit">&#119135;</span>
-                &nbsp;=&nbsp;
-                <input type="number" min="1" name="score-tempo-bpm">
-            </div>
-
-            <div class="score-size">
-                <input type="number" min="1" name="score-width">
-                &nbsp;&times;&nbsp;
-                <input type="number" min="1" name="score-height">
-            </div>
+    <div class="score-properties">
+        <div class="score-time-signature">
+            <input type="number" min="1" name="score-time-signature-beats">
+            &nbsp;/&nbsp;
+            <input type="number" min="1" name="score-time-signature-unit">
         </div>
 
-        <div class="score-chords">
-           <svg width="620" height="620">
-               <rect class="outline" x="10" y="10" width="600" height="600" />
-           </svg> 
+        <div class="score-tempo">
+            <span class="score-tempo-unit">&#119135;</span>
+            &nbsp;=&nbsp;
+            <input type="number" min="1" name="score-tempo-bpm">
         </div>
 
+        <div class="score-size">
+            <input type="number" min="1" name="score-width">
+            &nbsp;&times;&nbsp;
+            <input type="number" min="1" name="score-height">
+        </div>
     </div>
+
+    <div class="score-chords">
+       <svg width="620" height="620">
+           <rect class="outline" x="10" y="10" width="600" height="600" />
+       </svg> 
+    </div>
+
 </div>
 
-<div class="bottom">
-    <div class="palette-view">
-        <div class="palette-group">
-            <div class="palette-root-note palette-row">
-                <div class="palette-item" data-value="A">A</div>
-                <div class="palette-item" data-value="B">B</div>
-                <div class="palette-item" data-value="C">C</div>
-                <div class="palette-item" data-value="D">D</div>
-                <div class="palette-item" data-value="E">E</div>
-                <div class="palette-item" data-value="F">F</div>
-                <div class="palette-item" data-value="G">G</div>
-            </div>
-            <div class="palette-root-alt palette-row">
-                <div class="palette-item" data-value="flat">&flat;</div>
-                <div class="palette-item" data-value="sharp">&sharp;</div>
-            </div>
+<div class="palette-view">
+    <div class="palette-group">
+        <div class="palette-root-note palette-row">
+            <div class="palette-item" data-value="A">A</div>
+            <div class="palette-item" data-value="B">B</div>
+            <div class="palette-item" data-value="C">C</div>
+            <div class="palette-item" data-value="D">D</div>
+            <div class="palette-item" data-value="E">E</div>
+            <div class="palette-item" data-value="F">F</div>
+            <div class="palette-item" data-value="G">G</div>
         </div>
-        <div class="palette-group">
-            <div class="palette-quality palette-row">
-                <div class="palette-item" data-value="minor">m</div>
-                <div class="palette-item" data-value="sus2">sus2</div>
-                <div class="palette-item" data-value="sus4">sus4</div>
-                <div class="palette-item" data-value="no3">no3</div>
-            </div>
-            <div class="palette-fifth palette-row">
-                <div class="palette-item" data-value="flat">&flat;5</div>
-                <div class="palette-item" data-value="sharp">&sharp;5</div>
-            </div>
-            <div class="palette-addition palette-row">
-                <div class="palette-item" data-value="2">add2</div>
-                <div class="palette-item" data-value="4">add4</div>
-                <div class="palette-item" data-value="6">add6</div>
-            </div>
+        <div class="palette-root-alt palette-row">
+            <div class="palette-item" data-value="flat">&flat;</div>
+            <div class="palette-item" data-value="sharp">&sharp;</div>
         </div>
-        <div class="palette-group">
-            <div class="palette-extension palette-row">
-                <div class="palette-item" data-value="6">6</div>
-                <div class="palette-item" data-value="dim7" title="Implies &flat;5">dim7</div>
-                <div class="palette-item" data-value="7">7</div>
-                <div class="palette-item" data-value="M7">M7</div>
-                <div class="palette-item" data-value="9">9</div>
-                <div class="palette-item" data-value="M9">M9</div>
-                <div class="palette-item" data-value="11">11</div>
-                <div class="palette-item" data-value="M11">M11</div>
-                <div class="palette-item" data-value="13">13</div>
-                <div class="palette-item" data-value="M13">M13</div>
-            </div>
+    </div>
+    <div class="palette-group">
+        <div class="palette-quality palette-row">
+            <div class="palette-item" data-value="minor">m</div>
+            <div class="palette-item" data-value="sus2">sus2</div>
+            <div class="palette-item" data-value="sus4">sus4</div>
+            <div class="palette-item" data-value="no3">no3</div>
         </div>
-        <div class="palette-group">
-            <div class="palette-bass-note palette-row">
-                <div class="palette-item" data-value="A">/&nbsp;A</div>
-                <div class="palette-item" data-value="B">/&nbsp;B</div>
-                <div class="palette-item" data-value="C">/&nbsp;C</div>
-                <div class="palette-item" data-value="D">/&nbsp;D</div>
-                <div class="palette-item" data-value="E">/&nbsp;E</div>
-                <div class="palette-item" data-value="F">/&nbsp;F</div>
-                <div class="palette-item" data-value="G">/&nbsp;G</div>
-            </div>
-            <div class="palette-bass-alt palette-row">
-                <div class="palette-item" data-value="flat">&flat;</div>
-                <div class="palette-item" data-value="sharp">&sharp;</div>
-            </div>
+        <div class="palette-fifth palette-row">
+            <div class="palette-item" data-value="flat">&flat;5</div>
+            <div class="palette-item" data-value="sharp">&sharp;5</div>
+        </div>
+        <div class="palette-addition palette-row">
+            <div class="palette-item" data-value="2">add2</div>
+            <div class="palette-item" data-value="4">add4</div>
+            <div class="palette-item" data-value="6">add6</div>
+        </div>
+    </div>
+    <div class="palette-group">
+        <div class="palette-extension palette-row">
+            <div class="palette-item" data-value="6">6</div>
+            <div class="palette-item" data-value="dim7" title="Implies &flat;5">dim7</div>
+            <div class="palette-item" data-value="7">7</div>
+            <div class="palette-item" data-value="M7">M7</div>
+            <div class="palette-item" data-value="9">9</div>
+            <div class="palette-item" data-value="M9">M9</div>
+            <div class="palette-item" data-value="11">11</div>
+            <div class="palette-item" data-value="M11">M11</div>
+            <div class="palette-item" data-value="13">13</div>
+            <div class="palette-item" data-value="M13">M13</div>
+        </div>
+    </div>
+    <div class="palette-group">
+        <div class="palette-bass-note palette-row">
+            <div class="palette-item" data-value="A">/&nbsp;A</div>
+            <div class="palette-item" data-value="B">/&nbsp;B</div>
+            <div class="palette-item" data-value="C">/&nbsp;C</div>
+            <div class="palette-item" data-value="D">/&nbsp;D</div>
+            <div class="palette-item" data-value="E">/&nbsp;E</div>
+            <div class="palette-item" data-value="F">/&nbsp;F</div>
+            <div class="palette-item" data-value="G">/&nbsp;G</div>
+        </div>
+        <div class="palette-bass-alt palette-row">
+            <div class="palette-item" data-value="flat">&flat;</div>
+            <div class="palette-item" data-value="sharp">&sharp;</div>
         </div>
     </div>
 </div>
