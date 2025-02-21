@@ -1,5 +1,40 @@
 
+@import "fonts.css";
+
 body {
     font-family: "Noto Sans";
+    font-size: 14pt;
 }
 
+h1 {
+    font-family: "MuseJazzText";
+    font-size: 180%;
+    text-align: center;
+}
+
+.new-score {
+    background-color: transparent;
+    padding: 0.5em 1em;
+    border: 2px solid black;
+    border-radius: 1em;
+    position: absolute;
+    left: 1em;
+    top: 1em;
+    cursor: pointer;
+
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.score-list {
+    display: table;
+    margin: 1rem auto;
+}
+
+.score-title {
+    display: block;
+    margin-top: 0.25rem;
+}

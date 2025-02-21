@@ -49,14 +49,14 @@ export class PaletteView {
     showSelection() {
         const chord = this.controller.getSelectedChord();
 
-        this.updateRow(this.rootNoteItems, chord.rootNote[0]);
-        this.updateRow(this.rootAltItems, chord.rootNote[1]);
-        this.updateRow(this.qualityItems, chord.quality);
-        this.updateRow(this.fifthItems, chord.fifth);
+        this.updateRow(this.rootNoteItems,  chord.rootNote);
+        this.updateRow(this.rootAltItems,   chord.rootAlt);
+        this.updateRow(this.qualityItems,   chord.quality);
+        this.updateRow(this.fifthItems,     chord.fifth);
         this.updateRow(this.extensionItems, chord.extension);
-        this.updateRow(this.additionItems, chord.addition);
-        this.updateRow(this.bassNoteItems, chord.bassNote[0]);
-        this.updateRow(this.bassAltItems, chord.bassNote[1]);
+        this.updateRow(this.additionItems,  chord.addition);
+        this.updateRow(this.bassNoteItems,  chord.bassNote);
+        this.updateRow(this.bassAltItems,   chord.bassAlt);
     }
 
     setEditable(editable) {

@@ -20,10 +20,13 @@ export class Score {
         this.timeSignature = DEFAULT_TIME_SIGNATURE;
         this.tempo         = DEFAULT_TEMPO;
         this.chords        = [];
+        this.creationDate  = new Date();
+        this.saveDate      = this.creationDate;
         this.resize();
     }
 
     serialize() {
+        this.saveDate = new Date();
         return JSON.stringify(this);
     }
 

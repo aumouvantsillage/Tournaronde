@@ -46,6 +46,7 @@ export class Controller {
     }
 
     save() {
+        this.score.saveDate = Date.now();
         localStorage.setItem(this.score.id, this.score.serialize());
     }
 
@@ -132,24 +133,23 @@ export class Controller {
     }
 
     updateSelectedChord(key, value) {
-        function toggle(prev, deflt) {
-            if (prev !== value) {
-                return value;
+        function toggle(obj, deflt) {
+            if (obj[key] !== value) {
+                obj[key] = value;
             }
-            return deflt;
+            else {
+                obj[key] = deflt;
+            }
         }
         const chords = this.score.getChordsInBar(this.selected.col, this.selected.row);
         const [eqLeft, eqRight, neLeft, neRight] = CHORD_MAPPING[this.selected.slotRow][this.selected.slotCol];
         for (let i = eqLeft; i < eqRight; i ++) {
-            const c = chords[i];
             switch (key) {
-                case "rootNote": c.rootNote[0] = toggle(c.rootNote[0], "none");    break;
-                case "rootAlt":  c.rootNote[1] = toggle(c.rootNote[1], "natural"); break;
-                case "quality":  c.quality     = toggle(c.quality,     "major");   break;
-                case "bassNote": c.bassNote[0] = toggle(c.bassNote[0], "none");    break;
-                case "bassAlt":  c.bassNote[1] = toggle(c.bassNote[1], "natural"); break;
-                case "fifth":    c.fifth       = toggle(c.fifth,       "natural"); break;
-                default:         c[key]        = toggle(c[key],        "none");
+                case "rootAlt":
+                case "bassAlt":
+                case "fifth":    toggle(chords[i], "natural"); break;
+                case "quality":  toggle(chords[i], "major");   break;
+                default:         toggle(chords[i], "none");
             }
         }
         this.paletteView.showSelection();

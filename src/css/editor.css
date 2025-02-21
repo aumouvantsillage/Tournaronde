@@ -26,18 +26,37 @@ body {
 }
 
 /* -------------------------------------------------------------------------- *
- * Score properties.
+ * Common UI elements.
  * -------------------------------------------------------------------------- */
 
-.score-editable {
+.big-button {
+    display: block;
     background-color: transparent;
     padding: 0.5em 1em;
     border: 2px solid black;
     border-radius: 1em;
+    cursor: pointer;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+/* -------------------------------------------------------------------------- *
+ * Score properties.
+ * -------------------------------------------------------------------------- */
+
+.score-index {
     position: absolute;
     left: 1em;
     top: 1em;
-    cursor: default;
+}
+
+.score-editable {
+    position: absolute;
+    right: 1em;
+    top: 1em;
 }
 
 .editable .score-editable {
@@ -46,9 +65,6 @@ body {
 
 h1 {
     font-size: 180%;
-}
-
-.score-title {
     text-align: center;
 }
 
