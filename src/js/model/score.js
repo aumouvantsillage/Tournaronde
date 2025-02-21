@@ -5,7 +5,7 @@ const DEFAULT_WIDTH          = 4
 const DEFAULT_HEIGHT         = 4
 const DEFAULT_TITLE          = "New Score";
 const DEFAULT_TIME_SIGNATURE = {beats: 4, unit: 4};
-const DEFAULT_TEMPO          = {unit: 3, bpm: 120};
+const DEFAULT_TEMPO          = {unit: 2, bpm: 120};
 
 const TEMPO_COUNT            = 5
 

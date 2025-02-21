@@ -56,6 +56,7 @@ export class Controller {
         }
 
         this.score.deserialize(json);
+        this.scoreView.redrawScoreProperties();
         this.scoreView.redraw();
         this.paletteView.showSelection();
     }
@@ -74,9 +75,33 @@ export class Controller {
         this.save();
     }
 
+    setTitle(title) {
+        this.score.title = title;
+        this.scoreView.redrawScoreProperties();
+        // FIXME This could require a score redraw if the title height has changed.
+        this.save();
+    }
+
+    setTimeSignatureBeats(beats) {
+        this.score.timeSignature.beats = beats;
+        this.scoreView.redrawScoreProperties();
+        this.save();
+    }
+
+    setTimeSignatureUnit(unit) {
+        this.score.timeSignature.unit = unit;
+        this.scoreView.redrawScoreProperties();
+        this.save();
+    }
+
     setNextTempoUnit() {
-        console.log(this.score.tempo);
         this.score.setTempoUnit(this.score.tempo.unit + 1);
+        this.scoreView.redrawScoreProperties();
+        this.save();
+    }
+
+    setTempoBpm(bpm) {
+        this.score.tempo.bpm = bpm;
         this.scoreView.redrawScoreProperties();
         this.save();
     }

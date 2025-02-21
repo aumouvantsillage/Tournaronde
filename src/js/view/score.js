@@ -64,6 +64,8 @@ export class ScoreView {
         this.tempoUnitInput          = container.querySelector(".score-tempo-unit");
         this.tempoBpmInput           = container.querySelector("input[name='score-tempo-bpm']");
         this.grid                    = container.querySelector(".score-chords svg");
+
+        this.titleEdit               = false;
     }
 
     setController(controller) {
@@ -81,14 +83,35 @@ export class ScoreView {
             this.controller.setScoreHeight(parseInt(this.heightInput.value));
         });
 
+        this.titleHeading.addEventListener("input", (_) => {
+            this.titleEdit = true;
+        });
+
+        this.titleHeading.addEventListener("focusout", (_) => {
+            this.titleEdit = false;
+            this.controller.setTitle(this.titleHeading.innerText);
+        });
+
+        this.timeSignatureBeatsInput.addEventListener("change", (_) => {
+            this.controller.setTimeSignatureBeats(parseInt(this.timeSignatureBeatsInput.value));
+
+        });
+
+        this.timeSignatureUnitInput.addEventListener("change", (_) => {
+            this.controller.setTimeSignatureUnit(parseInt(this.timeSignatureUnitInput.value));
+
+        });
+
         this.tempoUnitInput.addEventListener("click", (_) => {
             if (this.controller.editable) {
                 this.controller.setNextTempoUnit();
             }
         });
 
-        // TODO tempo unit as multi-state button
-        // TODO title heading, time signature, tempo
+        this.tempoBpmInput.addEventListener("change", (_) => {
+            this.controller.setTempoBpm(parseInt(this.tempoBpmInput.value));
+
+        });
     }
 
     redrawScoreProperties() {
