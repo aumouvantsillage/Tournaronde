@@ -7,6 +7,26 @@ body {
 }
 
 /* -------------------------------------------------------------------------- *
+ * Layout.
+ * -------------------------------------------------------------------------- */
+
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.top {
+    flex-shrink: 1;
+    overflow-y: scroll;
+}
+
+.bottom {
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+/* -------------------------------------------------------------------------- *
  * Score properties.
  * -------------------------------------------------------------------------- */
 
@@ -29,8 +49,7 @@ h1 {
     font-size: 180%;
 }
 
-.score-title,
-.grid-properties {
+.score-title {
     text-align: center;
 }
 
@@ -39,23 +58,15 @@ h1 {
     margin: 0 auto;
 }
 
-.score-properties div {
-    display: inline-block;
-    margin: 0 2em;
-}
-
-.grid-properties,
-.palette-view {
+.score-size {
     display: none;
 }
 
-.editable .grid-properties {
-    display: block;
-}
-
-.palette-view.editable {
-    display: table;
-    margin: 1em auto;
+.score-time-signature,
+.score-tempo,
+.editable .score-size {
+    display: inline-block;
+    margin: 0 1em;
 }
 
 .score-tempo-unit,
@@ -101,23 +112,33 @@ input[name='score-height'][disabled] {
  * Palette.
  * -------------------------------------------------------------------------- */
 
+.palette-view {
+    display: none;
+}
+
+.palette-view.editable {
+    display: table;
+    margin: 1em auto;
+}
+
 .palette-group {
     display: table;
     margin: 0 auto;
     border-collapse: separate;
-    border-spacing: 0.25em;
+    border-spacing: 0.5rem 0.1rem;
 }
 
 .palette-row {
     display: table-cell;
+    border-spacing: 0.2rem 0rem;
 }
 
 .palette-item {
     display: table-cell;
     vertical-align: middle;
     border: 1px solid black;
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
+    border-radius: 0.5rem;
+    padding: 0.4rem 0.9rem;
     cursor: pointer;
 }
 

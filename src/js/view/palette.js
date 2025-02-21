@@ -25,14 +25,14 @@ export class PaletteView {
 
     setController(controller) {
         this.controller = controller;
-        this.addClickHandler(this.rootNoteItems, "rootNote");
-        this.addClickHandler(this.rootAltItems, "rootAlt");
-        this.addClickHandler(this.qualityItems, "quality");
-        this.addClickHandler(this.fifthItems, "fifth");
+        this.addClickHandler(this.rootNoteItems,  "rootNote");
+        this.addClickHandler(this.rootAltItems,   "rootAlt");
+        this.addClickHandler(this.qualityItems,   "quality");
+        this.addClickHandler(this.fifthItems,     "fifth");
         this.addClickHandler(this.extensionItems, "extension");
-        this.addClickHandler(this.additionItems, "addition");
-        this.addClickHandler(this.bassNoteItems, "bassNote");
-        this.addClickHandler(this.bassAltItems, "bassAlt");
+        this.addClickHandler(this.additionItems,  "addition");
+        this.addClickHandler(this.bassNoteItems,  "bassNote");
+        this.addClickHandler(this.bassAltItems,   "bassAlt");
     }
 
     updateRow(items, value) {
