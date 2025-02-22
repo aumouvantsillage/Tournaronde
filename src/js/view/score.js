@@ -218,7 +218,7 @@ export class ScoreView {
                                 ty += barHeight / 2;
                             }
                             else {
-                                scaling = (barWidth + barHeight) / (textSize.width + textSize.height) / 2;
+                                scaling = 1 / (textSize.width / barWidth + textSize.height / barHeight);
                                 if (slotCol === 0) {
                                     tx += textSize.width  * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
                                     ty += textSize.height * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
@@ -231,7 +231,7 @@ export class ScoreView {
                         }
                         else {
                             if (slotCol === 1) {
-                                scaling = barWidth / (textSize.width + textSize.height * 2);
+                                scaling = 1 / (textSize.width / barWidth + textSize.height / barHeight * 2);
                                 tx += barWidth / 2;
                                 if (slotRow === 0) {
                                     ty += textSize.height * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
@@ -241,7 +241,7 @@ export class ScoreView {
                                 }
                             }
                             if (slotRow === 1) {
-                                scaling = barHeight / (textSize.width * 2 + textSize.height);
+                                scaling = 1 / (textSize.width / barWidth * 2 + textSize.height / barHeight);
                                 ty += barHeight / 2;
                                 if (slotCol === 0) {
                                     tx += textSize.width * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
