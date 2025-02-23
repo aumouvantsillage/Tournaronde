@@ -6,19 +6,23 @@ export class EditorMenu {
 
         this.fullscreenButton = container.querySelector(".score-fullscreen-btn");
         this.editButton       = container.querySelector(".score-edit-btn");
+        this.saveButton       = container.querySelector(".score-save-btn");
     
         this.fullscreen       = false;
 
-        this.fullscreenButton.addEventListener("click", (_) => {
+        this.fullscreenButton.addEventListener("click", _ => {
             this.toggleFullscreen();
         });
 
+        this.saveButton.addEventListener("click", _ => {
+            this.controller.saveAsFile();
+        });
     }
 
     setController(controller) {
         this.controller = controller;
 
-        this.editButton.addEventListener("click", (_) => {
+        this.editButton.addEventListener("click", _ => {
             this.controller.toggleEditable();
             if (this.controller.editable) {
                 this.editButton.classList.add("active");
@@ -43,5 +47,4 @@ export class EditorMenu {
             });
         }
     }
-
 }

@@ -19,6 +19,8 @@ const CHORD_MAPPING = [
     ]
 ];
 
+const SANITIZE_REPLACEMENT = "-";
+
 export class Controller {
     constructor(score, scoreView, paletteView, menu) {
         this.score       = score;
@@ -50,6 +52,16 @@ export class Controller {
     save() {
         this.score.saveDate = Date.now();
         localStorage.setItem(this.score.id, this.score.serialize());
+    }
+
+    saveAsFile() {
+        const data = new Blob([this.score.serialize()], {type: "application/json"});
+        const url = URL.createObjectURL(data);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = this.score.title.replace(/[\/\?<>\\:\*\|"]/g, "-") + ".json";
+        a.click();
+        setTimeout(_ => URL.revokeObjectURL(url), 0);
     }
 
     load(id) {
