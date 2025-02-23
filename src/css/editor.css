@@ -11,6 +11,10 @@ body {
     height: 100vh;
 }
 
+.menu {
+    flex-shrink: 0;
+}
+
 .score-view {
     flex-shrink: 1;
     overflow-y: scroll;
@@ -18,33 +22,6 @@ body {
 
 .palette-view {
     flex-shrink: 0;
-}
-
-/* -------------------------------------------------------------------------- *
- * Main buttons.
- * -------------------------------------------------------------------------- */
-
-.big-button {
-    font-family: "Heydings Controls";
-    position: absolute;
-    top: 1em;
-}
-
-.score-index-btn {
-    left: 1em;
-}
-
-.score-edit-btn {
-    right: 5em;
-}
-
-.score-fullscreen-btn {
-    right: 1em;
-}
-
-.score-fullscreen-btn.active,
-.editable .score-edit-btn {
-    background-color: rgb(220, 220, 220);
 }
 
 /* -------------------------------------------------------------------------- *

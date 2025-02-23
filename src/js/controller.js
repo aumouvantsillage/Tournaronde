@@ -20,13 +20,15 @@ const CHORD_MAPPING = [
 ];
 
 export class Controller {
-    constructor(score, scoreView, paletteView) {
+    constructor(score, scoreView, paletteView, menu) {
         this.score       = score;
         this.scoreView   = scoreView;
         this.paletteView = paletteView;
+        this.menu        = menu;
 
         scoreView.setController(this);
         paletteView.setController(this);
+        menu.setController(this);
 
         this.editable = false;
 

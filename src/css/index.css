@@ -1,10 +1,9 @@
 
 @import "common.css";
 
-.new-score-btn {
-    position: absolute;
-    left: 1em;
-    top: 1em;
+.menu {
+    position: sticky;
+    top: 0;
 }
 
 .score-list {
