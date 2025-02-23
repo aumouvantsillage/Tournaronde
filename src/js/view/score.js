@@ -55,14 +55,14 @@ export class ScoreView {
         this.controller              = null;
         this.container               = container;
 
-        this.editButton              = container.querySelector(".score-editable");
-        this.widthInput              = container.querySelector("input[name='score-width']");
-        this.heightInput             = container.querySelector("input[name='score-height']");
+        this.editButton              = container.querySelector(".score-edit-btn");
+        this.widthInput              = container.querySelector(".score-width");
+        this.heightInput             = container.querySelector(".score-height");
         this.titleHeading            = container.querySelector(".score-title");
-        this.timeSignatureBeatsInput = container.querySelector("input[name='score-time-signature-beats']");
-        this.timeSignatureUnitInput  = container.querySelector("input[name='score-time-signature-unit']");
+        this.timeSignatureBeatsInput = container.querySelector(".score-time-beats");
+        this.timeSignatureUnitInput  = container.querySelector(".score-time-unit");
         this.tempoUnitInput          = container.querySelector(".score-tempo-unit");
-        this.tempoBpmInput           = container.querySelector("input[name='score-tempo-bpm']");
+        this.tempoBpmInput           = container.querySelector(".score-tempo-bpm");
         this.grid                    = container.querySelector(".score-chords svg");
 
         this.titleEdit               = false;

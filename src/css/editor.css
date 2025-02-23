@@ -1,10 +1,5 @@
 
-@import "fonts.css";
-
-body {
-    font-family: "MuseJazzText";
-    font-size: 14pt;
-}
+@import "common.css";
 
 /* -------------------------------------------------------------------------- *
  * Layout.
@@ -26,46 +21,23 @@ body {
 }
 
 /* -------------------------------------------------------------------------- *
- * Common UI elements.
- * -------------------------------------------------------------------------- */
-
-.big-button {
-    display: block;
-    background-color: transparent;
-    padding: 0.5em 1em;
-    border: 2px solid black;
-    border-radius: 1em;
-    cursor: pointer;
-}
-
-a {
-    color: black;
-    text-decoration: none;
-}
-
-/* -------------------------------------------------------------------------- *
  * Score properties.
  * -------------------------------------------------------------------------- */
 
-.score-index {
+.score-index-btn {
     position: absolute;
     left: 1em;
     top: 1em;
 }
 
-.score-editable {
+.score-edit-btn {
     position: absolute;
     right: 1em;
     top: 1em;
 }
 
-.editable .score-editable {
+.editable .score-edit-btn {
     background-color: rgb(220, 220, 220);
-}
-
-h1 {
-    font-size: 180%;
-    text-align: center;
 }
 
 .score-properties {
@@ -73,13 +45,11 @@ h1 {
     margin: 0 auto;
 }
 
-.score-size {
+.score-view:not(.editable) .score-size {
     display: none;
 }
 
-.score-time-signature,
-.score-tempo,
-.editable .score-size {
+.input-group {
     display: inline-block;
     margin: 0 1em;
 }
@@ -112,14 +82,14 @@ input[type='number'][disabled] {
     color: black;
 }
 
-input[name='score-time-signature-beats'][disabled],
-input[name='score-width'][disabled] {
+.score-time-beats[disabled],
+.score-width[disabled] {
     text-align: right;
 }
 
-input[name='score-time-signature-unit'][disabled],
-input[name='score-tempo-bpm'][disabled],
-input[name='score-height'][disabled] {
+.score-time-unit[disabled],
+.score-tempo-bpm[disabled],
+.score-height[disabled] {
     text-align: left;
 }
 

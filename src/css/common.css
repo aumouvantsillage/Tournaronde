@@ -1,0 +1,27 @@
+
+@import "fonts.css";
+
+body {
+    font-family: "MuseJazzText";
+    font-size: 14pt;
+}
+
+h1 {
+    font-size: 180%;
+    text-align: center;
+}
+
+a {
+    color: black;
+    text-decoration: none;
+}
+
+.big-button {
+    display: block;
+    background-color: transparent;
+    padding: 0.5em 1em;
+    border: 2px solid black;
+    border-radius: 1em;
+    cursor: pointer;
+}
+

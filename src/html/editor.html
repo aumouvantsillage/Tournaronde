@@ -5,28 +5,28 @@
 <script type="module" src="../js/editor.js"></script>
 
 <div class="score-view">
-    <a class="score-index big-button" href="index.html">Index</a>
-    <div class="score-editable big-button">Edit</div>
+    <a class="score-index-btn big-button" href="index.html">Index</a>
+    <div class="score-edit-btn big-button">Edit</div>
 
     <h1 class="score-title"></h1>
 
     <div class="score-properties">
-        <div class="score-time-signature">
-            <input type="number" min="1" name="score-time-signature-beats">
+        <div class="input-group">
+            <input class="score-time-beats" type="number" min="1">
             &nbsp;/&nbsp;
-            <input type="number" min="1" name="score-time-signature-unit">
+            <input class="score-time-unit" type="number" min="1">
         </div>
 
-        <div class="score-tempo">
+        <div class="input-group">
             <span class="score-tempo-unit">&#119135;</span>
             &nbsp;=&nbsp;
-            <input type="number" min="1" name="score-tempo-bpm">
+            <input class="score-tempo-bpm" type="number" min="1">
         </div>
 
-        <div class="score-size">
-            <input type="number" min="1" name="score-width">
+        <div class="score-size input-group">
+            <input class="score-width" type="number" min="1">
             &nbsp;&times;&nbsp;
-            <input type="number" min="1" name="score-height">
+            <input class="score-height" type="number" min="1">
         </div>
     </div>
 
@@ -35,7 +35,6 @@
            <rect class="outline" x="10" y="10" width="600" height="600" />
        </svg> 
     </div>
-
 </div>
 
 <div class="palette-view">
