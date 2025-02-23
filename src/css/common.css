@@ -18,17 +18,22 @@ a {
     text-decoration: none;
 }
 
+.menu {
+    padding: 0.2em;
+}
+
 .menu-item {
     display: inline-block;
     background-color: transparent;
-    padding: 0.5em 1em;
+    padding: 0.2em 0.5em;
     border: 2px solid black;
-    border-radius: 1em;
+    border-radius: 0.7em;
     cursor: pointer;
 }
 
 .menu-item.icon {
-    font-family: "Heydings Controls";
+    font-family: "MaterialIcons";
+    font-size: 18pt;
 }
 
 .menu-item.active {
