@@ -55,6 +55,7 @@ export class ScoreView {
         this.controller              = null;
         this.container               = container;
 
+        this.fullscreenButton        = container.querySelector(".score-fullscreen-btn");
         this.editButton              = container.querySelector(".score-edit-btn");
         this.widthInput              = container.querySelector(".score-width");
         this.heightInput             = container.querySelector(".score-height");
@@ -63,13 +64,18 @@ export class ScoreView {
         this.timeSignatureUnitInput  = container.querySelector(".score-time-unit");
         this.tempoUnitInput          = container.querySelector(".score-tempo-unit");
         this.tempoBpmInput           = container.querySelector(".score-tempo-bpm");
-        this.grid                    = container.querySelector(".score-chords svg");
+        this.grid                    = container.querySelector(".score-chords");
 
+        this.fullscreen              = false;
         this.titleEdit               = false;
     }
 
     setController(controller) {
         this.controller = controller;
+
+        this.fullscreenButton.addEventListener("click", (_) => {
+            this.toggleFullscreen();
+        });
 
         this.editButton.addEventListener("click", (_) => {
             this.controller.toggleEditable();
@@ -112,6 +118,21 @@ export class ScoreView {
             this.controller.setTempoBpm(parseInt(this.tempoBpmInput.value));
 
         });
+    }
+
+    toggleFullscreen() {
+        if (this.fullscreen) {
+            document.exitFullscreen().then(_ => {
+                this.fullscreen = false;
+                this.fullscreenButton.classList.remove("active");
+            });
+        }
+        else {
+            document.querySelector("html").requestFullscreen().then(_ => {
+                this.fullscreen = true;
+                this.fullscreenButton.classList.add("active");
+            });
+        }
     }
 
     redrawScoreProperties() {

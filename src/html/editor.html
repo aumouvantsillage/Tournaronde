@@ -5,8 +5,9 @@
 <script type="module" src="../js/editor.js"></script>
 
 <div class="score-view">
-    <a class="score-index-btn big-button" href="index.html">Index</a>
-    <div class="score-edit-btn big-button">Edit</div>
+    <a class="score-index-btn big-button" href="index.html" title="Back to score index">5</a>
+    <div class="score-fullscreen-btn big-button" title="Toggle full screen">M</div>
+    <div class="score-edit-btn big-button" title="Toggle edit mode">L</div>
 
     <h1 class="score-title"></h1>
 
@@ -30,11 +31,9 @@
         </div>
     </div>
 
-    <div class="score-chords">
-       <svg width="620" height="620">
-           <rect class="outline" x="10" y="10" width="600" height="600" />
-       </svg> 
-    </div>
+    <svg class="score-chords" width="620" height="620">
+        <rect class="outline" x="10" y="10" width="600" height="600" />
+    </svg> 
 </div>
 
 <div class="palette-view">

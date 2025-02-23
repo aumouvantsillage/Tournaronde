@@ -21,24 +21,35 @@ body {
 }
 
 /* -------------------------------------------------------------------------- *
- * Score properties.
+ * Main buttons.
  * -------------------------------------------------------------------------- */
 
-.score-index-btn {
+.big-button {
+    font-family: "Heydings Controls";
     position: absolute;
-    left: 1em;
     top: 1em;
+}
+
+.score-index-btn {
+    left: 1em;
 }
 
 .score-edit-btn {
-    position: absolute;
-    right: 1em;
-    top: 1em;
+    right: 5.5em;
 }
 
+.score-fullscreen-btn {
+    right: 1em;
+}
+
+.score-fullscreen-btn.active,
 .editable .score-edit-btn {
     background-color: rgb(220, 220, 220);
 }
+
+/* -------------------------------------------------------------------------- *
+ * Score properties.
+ * -------------------------------------------------------------------------- */
 
 .score-properties {
     display: table;
@@ -135,7 +146,7 @@ input[type='number'][disabled] {
  * Score view.
  * -------------------------------------------------------------------------- */
 
-.score-chords svg {
+.score-chords {
     display: table;
     margin: 1rem auto;
 }
@@ -184,7 +195,7 @@ input[type='number'][disabled] {
     font-size: 75%;
 }
 
-rect.debug {
+.score-chords rect.debug {
     display: none;
     fill: rgba(255, 0, 0, 15%);
 }
