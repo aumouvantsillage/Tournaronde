@@ -6,6 +6,10 @@
     top: 0;
 }
 
+.open-score-file {
+    display: none;
+}
+
 .score-list {
     display: table;
     margin: 1rem auto;

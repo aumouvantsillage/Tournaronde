@@ -19,8 +19,6 @@ const CHORD_MAPPING = [
     ]
 ];
 
-const SANITIZE_REPLACEMENT = "-";
-
 export class Controller {
     constructor(score, scoreView, paletteView, menu) {
         this.score       = score;
