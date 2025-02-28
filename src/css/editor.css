@@ -33,6 +33,22 @@ body {
     margin: 0 auto;
 }
 
+.score-title {
+    font-family: "MuseJazzText";
+    font-weight: bold;
+    font-size: 180%;
+    width: calc(100vw - 2rem);
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0.67em 1rem;
+    text-align: center;
+}
+
+.score-title[disabled] {
+    color: black;
+    border: none;
+}
+
 .score-view:not(.editable) .score-size {
     display: none;
 }
@@ -54,17 +70,18 @@ input[type=number] {
 }
 
 .editable .score-tempo-unit,
-input[type='number'] {
+.editable input[type=text],
+input[type=number] {
     border: 1px solid black;
     border-radius: 0.5em;
 }
 
-input[type='number'] {
+input[type=number] {
     text-align: center;
     width: 3em;
 }
 
-input[type='number'][disabled] {
+input[type=number][disabled] {
     -moz-appearance: textfield;
     border: none;
     color: black;

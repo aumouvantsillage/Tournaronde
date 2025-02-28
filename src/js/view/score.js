@@ -57,53 +57,46 @@ export class ScoreView {
 
         this.widthInput              = container.querySelector(".score-width");
         this.heightInput             = container.querySelector(".score-height");
-        this.titleHeading            = container.querySelector(".score-title");
+        this.titleInput              = container.querySelector(".score-title");
         this.timeSignatureBeatsInput = container.querySelector(".score-time-beats");
         this.timeSignatureUnitInput  = container.querySelector(".score-time-unit");
         this.tempoUnitInput          = container.querySelector(".score-tempo-unit");
         this.tempoBpmInput           = container.querySelector(".score-tempo-bpm");
         this.grid                    = container.querySelector(".score-chords");
-
-        this.titleEdit               = false;
     }
 
     setController(controller) {
         this.controller = controller;
 
-        this.widthInput.addEventListener("change", (_) => {
+        this.widthInput.addEventListener("change", _ => {
             this.controller.setScoreWidth(parseInt(this.widthInput.value));
         });
 
-        this.heightInput.addEventListener("change", (_) => {
+        this.heightInput.addEventListener("change", _ => {
             this.controller.setScoreHeight(parseInt(this.heightInput.value));
         });
 
-        this.titleHeading.addEventListener("input", (_) => {
-            this.titleEdit = true;
+        this.titleInput.addEventListener("change", _ => {
+            this.controller.setTitle(this.titleInput.value);
         });
 
-        this.titleHeading.addEventListener("focusout", (_) => {
-            this.titleEdit = false;
-            this.controller.setTitle(this.titleHeading.innerText);
-        });
-
-        this.timeSignatureBeatsInput.addEventListener("change", (_) => {
+        this.timeSignatureBeatsInput.addEventListener("change", _ => {
             this.controller.setTimeSignatureBeats(parseInt(this.timeSignatureBeatsInput.value));
 
         });
 
-        this.timeSignatureUnitInput.addEventListener("change", (_) => {
+        this.timeSignatureUnitInput.addEventListener("change", _ => {
             this.controller.setTimeSignatureUnit(parseInt(this.timeSignatureUnitInput.value));
 
         });
 
-        this.tempoUnitInput.addEventListener("click", (_) => {
+        this.tempoUnitInput.addEventListener("click", _ => {
             if (this.controller.editable) {
                 this.controller.setNextTempoUnit();
             }
         });
 
-        this.tempoBpmInput.addEventListener("change", (_) => {
+        this.tempoBpmInput.addEventListener("change", _ => {
             this.controller.setTempoBpm(parseInt(this.tempoBpmInput.value));
 
         });
@@ -112,7 +105,7 @@ export class ScoreView {
     redrawScoreProperties() {
         this.widthInput.value              = this.score.width;
         this.heightInput.value             = this.score.height;
-        this.titleHeading.innerHTML        = this.score.title;
+        this.titleInput.value              = this.score.title;
         this.timeSignatureBeatsInput.value = this.score.timeSignature.beats;
         this.timeSignatureUnitInput.value  = this.score.timeSignature.unit;
         this.tempoUnitInput.innerHTML      = TEMPO_UNIT_TO_HTML[this.score.tempo.unit];
@@ -311,7 +304,7 @@ export class ScoreView {
                             circ.classList.add("inactive");
                         }
                         else {
-                            circ.addEventListener("click", (_) => {
+                            circ.addEventListener("click", _ => {
                                 this.controller.select(col, row, slotCol, slotRow);
                             });
                         }
@@ -340,7 +333,7 @@ export class ScoreView {
     setEditable(editable) {
         if (editable) {
             this.container.classList.add("editable");
-            this.titleHeading.setAttribute("contenteditable", true);
+            this.titleInput.removeAttribute("disabled");
             this.widthInput.removeAttribute("disabled");
             this.heightInput.removeAttribute("disabled");
             this.timeSignatureBeatsInput.removeAttribute("disabled");
@@ -349,8 +342,8 @@ export class ScoreView {
         }
         else {
             this.container.classList.remove("editable");
-            this.titleHeading.setAttribute("contenteditable", false);
-            this.widthInput.removeAttribute("disabled");
+            this.titleInput.setAttribute("disabled", true);
+            this.widthInput.setAttribute("disabled", true);
             this.heightInput.setAttribute("disabled", true);
             this.timeSignatureBeatsInput.setAttribute("disabled", true);
             this.timeSignatureUnitInput.setAttribute("disabled", true);
