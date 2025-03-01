@@ -27,11 +27,36 @@ function loadScores(scoreList, files) {
     }
 }
 
+function moveScore(scoreList, container, offset) {
+    const id = parseInt(container.dataset.id);
+
+    const srcIndex = scoreList.content.indexOf(id);
+    const destIndex = srcIndex + offset;
+    if (destIndex < 0 || destIndex >= scoreList.content.length) {
+        return;
+    }
+
+    scoreList.content[srcIndex]  = scoreList.content[destIndex];
+    scoreList.content[destIndex] = id;
+    scoreList.update();
+
+    const parentElt = container.parentElement;
+    parentElt.removeChild(container);
+    parentElt.insertBefore(container, parentElt.children[destIndex]);
+}
+
+function deleteScore(scoreList, container) {
+    const id = container.dataset.id;
+    console.log("Deleting score " + id);
+}
+
 function onLoad() {
     const scoreList = new ScoreList();
 
     const openScoreButton = document.querySelector(".open-score-btn");
     const openScoreInput = document.querySelector(".open-score-file");
+    const editButton = document.querySelector(".list-edit-btn");
+    const container = document.querySelector(".score-list");
 
     openScoreButton.addEventListener("click", _ => {
         openScoreInput.click();
@@ -41,16 +66,45 @@ function onLoad() {
         loadScores(scoreList, Array.from(openScoreInput.files));
     });
 
-    const container = document.querySelector(".score-list");
+    let editable = false;
+
+    editButton.addEventListener("click", _ => {
+        editable = !editable;
+        if (editable) {
+            editButton.classList.add("active");
+            container.classList.add("editable");
+        }
+        else {
+            editButton.classList.remove("active");
+            container.classList.remove("editable");
+        }
+    });
 
     for (const id of scoreList.content) {
         const score = JSON.parse(localStorage.getItem(id));
 
-        const item = document.createElement("div");
-        item.innerHTML = `<a class="score-title" href="editor.html#${id}">${score.title}</a>`;
-        container.appendChild(item);
+        const div = document.createElement("div");
+        div.classList.add("score-item");
+        div.setAttribute("data-id", id);
+        div.innerHTML = `
+            <span class="score-action score-action-up">&#xe5d8;</span>
+            <span class="score-action score-action-down">&#xe5db;</span>
+            <span class="score-action score-action-delete">&#xe872;</span>
+            <a class="score-title" href="editor.html#${id}">${score.title}</a>
+        `;
+        container.appendChild(div);
+    }
 
-        // TODO Add reorder, delete options
+    for (const btn of document.querySelectorAll(".score-action-up")) {
+        btn.addEventListener("click", _ => moveScore(scoreList, btn.parentElement, -1));
+    }
+
+    for (const btn of document.querySelectorAll(".score-action-down")) {
+        btn.addEventListener("click", _ => moveScore(scoreList, btn.parentElement, 1));
+    }
+
+    for (const btn of document.querySelectorAll(".score-action-delete")) {
+        btn.addEventListener("click", _ => deleteScore(scoreList, btn.parentElement));
     }
 }
 

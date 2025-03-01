@@ -15,7 +15,22 @@
     margin: 1rem auto;
 }
 
-.score-title {
+.score-item {
     display: block;
     margin-top: 0.25rem;
 }
+
+.score-item a {
+    margin-left: 1rem;
+}
+
+.score-action {
+    font-family: "MaterialIcons";
+    display: none;
+    cursor: pointer;
+}
+
+.editable .score-action {
+    display: inline-block;
+}
+
