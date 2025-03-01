@@ -1,11 +1,35 @@
 
-function openScore(obj) {
-    obj.id = obj.saveDate = Date.now();
+import {ScoreList} from "./score-list.js";
+
+function addScore(scoreList, obj) {
+    obj.id = scoreList.makeId();
+    obj.saveDate = new Date();
     localStorage.setItem(obj.id, JSON.stringify(obj));
-    window.location = "editor.html#" + obj.id;
+    scoreList.add(obj.id);
+    return obj.id;
+}
+
+function loadScores(scoreList, files) {
+    let firstId;
+    for (const [i, file] of files.entries()) {
+        const reader = new FileReader();
+        reader.addEventListener("load", _ => {
+            const id = addScore(scoreList, JSON.parse(reader.result));
+            if (i === 0) {
+                firstId = id;
+            }
+            if (i === files.length - 1) {
+                scoreList.update();
+                window.location = "editor.html#" + firstId;
+            }
+        });
+        reader.readAsText(file);
+    }
 }
 
 function onLoad() {
+    const scoreList = new ScoreList();
+
     const openScoreButton = document.querySelector(".open-score-btn");
     const openScoreInput = document.querySelector(".open-score-file");
 
@@ -14,21 +38,15 @@ function onLoad() {
     });
 
     openScoreInput.addEventListener("change", _ => {
-        if (openScoreInput.files.length < 1) {
-            return;
-        }
-        const reader = new FileReader();
-        reader.addEventListener("load", _ => {
-            openScore(JSON.parse(reader.result));
-        });
-        reader.readAsText(openScoreInput.files[0]);
+        loadScores(scoreList, Array.from(openScoreInput.files));
     });
 
     const container = document.querySelector(".score-list");
 
-    for (const [id, json] of Object.entries(localStorage)) {
+    for (const id of scoreList.content) {
+        const score = JSON.parse(localStorage.getItem(id));
+
         const item = document.createElement("div");
-        const score = JSON.parse(json);
         item.innerHTML = `<a class="score-title" href="editor.html#${id}">${score.title}</a>`;
         container.appendChild(item);
 

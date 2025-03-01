@@ -1,4 +1,5 @@
 
+import {ScoreList} from "./score-list.js";
 import {DEFAULT_CHORD_PROPERTIES, EMPTY_CHORD} from "./model/chord.js";
 
 const CHORD_MAPPING = [
@@ -30,10 +31,19 @@ export class Controller {
         paletteView.setController(this);
         menu.setController(this);
 
+        this.reset();
+
+        this.scoreView.redrawScoreProperties();
+        this.scoreView.redraw();
+        this.paletteView.showSelection();
+    }
+
+    reset() {
         this.editable = false;
 
-        scoreView.setEditable(false);
-        paletteView.setEditable(false);
+        this.scoreView.setEditable(false);
+        this.paletteView.setEditable(false);
+        this.menu.setEditable(false);
 
         this.selected = {
             col: 0,
@@ -41,14 +51,24 @@ export class Controller {
             slotCol: 1,
             slotRow: 1
         };
-
-        this.scoreView.redrawScoreProperties();
-        this.scoreView.redraw();
-        this.paletteView.showSelection();
     }
 
     save() {
-        this.score.saveDate = Date.now();
+        const scoreList = new ScoreList();
+
+        const isNew = this.score.id === null;
+        if (isNew) {
+            this.score.id = scoreList.makeId();
+        }
+
+        scoreList.add(this.score.id);
+        scoreList.update();
+
+        if (isNew) {
+            this.menu.updateNavigationButtons();
+        }
+
+        this.score.saveDate = new Date();
         localStorage.setItem(this.score.id, this.score.serialize());
     }
 
@@ -68,10 +88,42 @@ export class Controller {
             return;
         }
 
+        this.reset();
         this.score.deserialize(json);
         this.scoreView.redrawScoreProperties();
         this.scoreView.redraw();
         this.paletteView.showSelection();
+        this.menu.updateNavigationButtons();
+    }
+
+    getPreviousId() {
+        // Unsaved score: disable access to previous score.
+        if (this.score.id === null) {
+            return null;
+        }
+
+        const scoreList = new ScoreList();
+        const loc = scoreList.content.indexOf(this.score.id);
+        if (loc < 1) {
+            return null;
+        }
+
+        return scoreList.content[loc - 1];
+    }
+
+    getNextId() {
+        // Unsaved score: disable access to next score.
+        if (!this.score.id) {
+            return null;
+        }
+
+        const scoreList = new ScoreList();
+        const loc = scoreList.content.indexOf(this.score.id);
+        if (loc === scoreList.content.length - 1) {
+            return null;
+        }
+        return scoreList.content[loc + 1];
+
     }
 
     setScoreWidth(width) {
@@ -168,5 +220,6 @@ export class Controller {
         this.editable = !this.editable;
         this.scoreView.setEditable(this.editable);
         this.paletteView.setEditable(this.editable);
+        this.menu.setEditable(this.editable);
     }
 }

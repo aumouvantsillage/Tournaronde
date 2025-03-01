@@ -18,6 +18,10 @@ a {
     text-decoration: none;
 }
 
+a.disabled {
+    pointer-events: none;
+}
+
 .menu {
     padding: 0.2em;
 }
@@ -34,6 +38,11 @@ a {
 .menu-item.icon {
     font-family: "MaterialIcons";
     font-size: 18pt;
+}
+
+.menu-item.disabled {
+    color: rgb(200, 200, 200);
+    border-color: rgb(200, 200, 200);
 }
 
 .menu-item.active {

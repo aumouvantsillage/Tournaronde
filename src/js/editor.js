@@ -12,9 +12,15 @@ function onLoad() {
     const menu        = new EditorMenu(document.querySelector(".menu"));
     const controller = new Controller(score, scoreView, paletteView, menu);
 
-    if (location.hash.startsWith("#")) {
-        controller.load(location.hash.slice(1));
+    function loadScore() {
+        if (location.hash.startsWith("#")) {
+            controller.load(location.hash.slice(1));
+        }
     }
+
+    window.addEventListener("hashchange", loadScore);
+
+    loadScore();
 }
 
 window.addEventListener("load", onLoad);

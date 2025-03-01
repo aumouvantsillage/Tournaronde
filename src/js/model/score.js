@@ -13,7 +13,7 @@ const CHORDS_PER_BAR         = 4
 
 export class Score {
     constructor() {
-        this.id            = Date.now();
+        this.id            = null;
         this.width         = DEFAULT_WIDTH;
         this.height        = DEFAULT_HEIGHT;
         this.title         = DEFAULT_TITLE;
