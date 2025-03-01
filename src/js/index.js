@@ -11,14 +11,14 @@ function addScore(scoreList, obj) {
 
 function loadScores(scoreList, files) {
     let firstId;
-    for (const [i, file] of files.entries()) {
+    for (const [idx, file] of files.entries()) {
         const reader = new FileReader();
         reader.addEventListener("load", _ => {
             const id = addScore(scoreList, JSON.parse(reader.result));
-            if (i === 0) {
+            if (idx === 0) {
                 firstId = id;
             }
-            if (i === files.length - 1) {
+            if (idx === files.length - 1) {
                 scoreList.update();
                 window.location = "editor.html#" + firstId;
             }
@@ -30,24 +30,34 @@ function loadScores(scoreList, files) {
 function moveScore(scoreList, container, offset) {
     const id = parseInt(container.dataset.id);
 
-    const srcIndex = scoreList.content.indexOf(id);
-    const destIndex = srcIndex + offset;
-    if (destIndex < 0 || destIndex >= scoreList.content.length) {
+    const srcIdx = scoreList.content.indexOf(id);
+    const destIdx = srcIdx + offset;
+    if (destIdx < 0 || destIdx >= scoreList.content.length) {
         return;
     }
 
-    scoreList.content[srcIndex]  = scoreList.content[destIndex];
-    scoreList.content[destIndex] = id;
+    scoreList.content[srcIdx]  = scoreList.content[destIdx];
+    scoreList.content[destIdx] = id;
     scoreList.update();
 
     const parentElt = container.parentElement;
     parentElt.removeChild(container);
-    parentElt.insertBefore(container, parentElt.children[destIndex]);
+    parentElt.insertBefore(container, parentElt.children[destIdx]);
 }
 
 function deleteScore(scoreList, container) {
-    const id = container.dataset.id;
-    console.log("Deleting score " + id);
+    const id = parseInt(container.dataset.id);
+    const title = container.querySelector("a").innerText;
+
+    if (!confirm(`Delete score '${title}'?`)) {
+        return;
+    }
+    
+    const idx = scoreList.content.indexOf(id);
+    scoreList.content.splice(idx, 1);
+    scoreList.update();
+
+    container.parentElement.removeChild(container);
 }
 
 function onLoad() {
