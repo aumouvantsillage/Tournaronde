@@ -57,6 +57,8 @@ function deleteScore(scoreList, container) {
     scoreList.content.splice(idx, 1);
     scoreList.update();
 
+    localStorage.removeItem(id);
+
     container.parentElement.removeChild(container);
 }
 
