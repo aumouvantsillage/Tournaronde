@@ -19,6 +19,13 @@ export class EditorMenu {
         this.saveButton.addEventListener("click", _ => {
             this.controller.saveAsFile();
         });
+
+        document.querySelector("body").addEventListener("keydown", evt => {
+            switch (evt.key) {
+                case "ArrowLeft": this.prevButton.click(); break;
+                case "ArrowRight": this.nextButton.click(); break;
+            }
+        });
     }
 
     setController(controller) {
