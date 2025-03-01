@@ -1,5 +1,5 @@
 
-import {EMPTY_CHORD} from "./model/chord.js";
+import {DEFAULT_CHORD_PROPERTIES, EMPTY_CHORD} from "./model/chord.js";
 
 const CHORD_MAPPING = [
     [
@@ -145,25 +145,20 @@ export class Controller {
     }
 
     updateSelectedChord(key, value) {
-        function toggle(obj, deflt) {
-            if (obj[key] !== value) {
-                obj[key] = value;
-            }
-            else {
-                obj[key] = deflt;
-            }
-        }
+        // If all selected chords have the same value for this key,
+        // toggle the current property, otherwise, set it.
         const chords = this.score.getChordsInBar(this.selected.col, this.selected.row);
-        const [eqLeft, eqRight, neLeft, neRight] = CHORD_MAPPING[this.selected.slotRow][this.selected.slotCol];
-        for (let i = eqLeft; i < eqRight; i ++) {
-            switch (key) {
-                case "rootAlt":
-                case "bassAlt":
-                case "fifth":    toggle(chords[i], "natural"); break;
-                case "quality":  toggle(chords[i], "major");   break;
-                default:         toggle(chords[i], "none");
-            }
+        const [eqLeft, eqRight, , ] = CHORD_MAPPING[this.selected.slotRow][this.selected.slotCol];
+        const allEq = chords.slice(eqLeft + 1, eqRight).every(it => chords[eqLeft].equals(it));
+
+        if (allEq && chords[eqLeft][key] === value) {
+            value = DEFAULT_CHORD_PROPERTIES[key];
         }
+
+        chords.slice(eqLeft, eqRight).forEach(it => {
+            it[key] = value;
+        });
+
         this.paletteView.showSelection();
         this.scoreView.redraw();
         this.save();
