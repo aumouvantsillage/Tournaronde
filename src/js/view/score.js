@@ -293,18 +293,56 @@ export class ScoreView {
             for (let slotRow = 0; slotRow < 3; slotRow ++) {
                 for (let col = 0; col < this.score.width; col++) {
                     for (let slotCol = 0; slotCol < 3; slotCol ++) {
-                        const circ = addSVGElement(this.grid, "circle", {
-                            class: "slot",
-                            cx: gridX + col * barWidth + slotCol * barWidth / 3 + barWidth / 6,
-                            cy: gridY + row * barHeight + slotRow * barHeight / 3 + barHeight / 6,
-                            r: Math.min(barWidth, barHeight) / 6
-                        });
-
-                        if (slotCol === 0 && slotRow === 2 || slotCol === 2 && slotRow === 0) {
-                            circ.classList.add("inactive");
+                        let elt;
+                        if (slotCol == 1 && slotRow == 1) {
+                            elt = addSVGElement(this.grid, "ellipse", {
+                                class: "slot",
+                                cx: gridX + (col + 0.5) * barWidth,
+                                cy: gridY + (row + 0.5) * barHeight,
+                                rx: barWidth / 6,
+                                ry: barHeight / 6
+                            });
                         }
                         else {
-                            circ.addEventListener("click", _ => {
+                            const x0 = gridX + col * barWidth  + slotCol * barWidth  / 2;
+                            const y0 = gridY + row * barHeight + slotRow * barHeight / 2;
+                            let dx1, dy1, dx2, dy2, rx, ry;
+                            if (slotCol == 1) {
+                                rx = barWidth  / 6;
+                                ry = barHeight / 3;
+                                dx1 = (slotRow - 1) * rx;
+                                dy1 = 0;
+                                dx2 = -2 * dx1;
+                                dy2 = 0;
+                            }
+                            else if (slotRow == 1) {
+                                rx = barWidth  / 3;
+                                ry = barHeight / 6;
+                                dx1 = 0;
+                                dy1 = (1 - slotCol) * ry;
+                                dx2 = 0;
+                                dy2 = -2 * dy1;
+                            }
+                            else {
+                                rx = barWidth  / 3;
+                                ry = barHeight / 3;
+                                dx1 = 0;
+                                dy1 = (1 - slotRow) * ry;
+                                dx2 = (1 - slotCol) * rx;
+                                dy2 = -dy1;
+                            }
+
+                            elt = addSVGElement(this.grid, "path", {
+                                class: "slot",
+                                d: `M ${x0} ${y0} l ${dx1} ${dy1} a ${rx} ${ry} 0 0 0 ${dx2} ${dy2} Z`
+                            });
+                        }
+
+                        if (slotCol === 0 && slotRow === 2 || slotCol === 2 && slotRow === 0) {
+                            elt.classList.add("inactive");
+                        }
+                        else {
+                            elt.addEventListener("click", _ => {
                                 this.controller.select(col, row, slotCol, slotRow);
                             });
                         }
