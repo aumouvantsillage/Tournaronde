@@ -297,7 +297,7 @@ export class ScoreView {
                             class: "slot",
                             cx: gridX + col * barWidth + slotCol * barWidth / 3 + barWidth / 6,
                             cy: gridY + row * barHeight + slotRow * barHeight / 3 + barWidth / 6,
-                            r: barWidth / 6
+                            r: Math.min(barWidth, barHeight) / 6
                         });
 
                         if (slotCol === 0 && slotRow === 2 || slotCol === 2 && slotRow === 0) {
