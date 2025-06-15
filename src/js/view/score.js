@@ -296,7 +296,7 @@ export class ScoreView {
                         const circ = addSVGElement(this.grid, "circle", {
                             class: "slot",
                             cx: gridX + col * barWidth + slotCol * barWidth / 3 + barWidth / 6,
-                            cy: gridY + row * barHeight + slotRow * barHeight / 3 + barWidth / 6,
+                            cy: gridY + row * barHeight + slotRow * barHeight / 3 + barHeight / 6,
                             r: Math.min(barWidth, barHeight) / 6
                         });
 
