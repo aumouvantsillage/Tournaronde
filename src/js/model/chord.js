@@ -1,5 +1,7 @@
 
 export const DEFAULT_CHORD_PROPERTIES = {
+    repeatStart: "false",
+    repeatEnd: "false",
     rootNote: "none",
     rootAlt: "natural",
     bassNote: "none",
@@ -39,6 +41,16 @@ export class Chord {
 
     isEmpty()  {
         return this.rootNote === "none";
+    }
+
+    merge(other) {
+        const res = new Chord();
+        for (const k of Object.keys(DEFAULT_CHORD_PROPERTIES)) {
+            if (k in this && k in other && this[k] == other[k]) {
+                res[k] = this[k];
+            }
+        }
+        return res;
     }
 
     toText() {

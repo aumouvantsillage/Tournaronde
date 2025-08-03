@@ -171,7 +171,7 @@ export class Controller {
         this.save();
     }
 
-    getChordInSlot(col, row, slotCol, slotRow, merge) {
+    getChordInSlot(col, row, slotCol, slotRow) {
         const chords = this.score.getChordsInBar(col, row);
         const [eqLeft, eqRight, neLeft, neRight] = CHORD_MAPPING[slotRow][slotCol];
 
@@ -179,7 +179,7 @@ export class Controller {
             return EMPTY_CHORD;
         }
 
-        if (merge && neLeft < chords.length && chords.slice(neLeft + 1, neRight).every(it => chords[neLeft].equals(it))) {
+        if (neLeft < chords.length && chords.slice(neLeft + 1, neRight).every(it => chords[neLeft].equals(it))) {
             return EMPTY_CHORD;
         }
 
@@ -187,7 +187,13 @@ export class Controller {
     }
 
     getSelectedChord() {
-        return this.getChordInSlot(this.selected.col, this.selected.row, this.selected.slotCol, this.selected.slotRow, false);
+        const chords = this.score.getChordsInBar(this.selected.col, this.selected.row);
+        const [eqLeft, eqRight, , ] = CHORD_MAPPING[this.selected.slotRow][this.selected.slotCol];
+        return chords.slice(eqLeft + 1, eqRight).reduce((a, b) => a.merge(b), chords[eqLeft]);
+    }
+
+    getSelectedBar() {
+        return this.score.getChordsInBar(this.selected.col, this.selected.row);
     }
 
     select(col, row, slotCol, slotRow) {
@@ -197,17 +203,33 @@ export class Controller {
     }
 
     updateSelectedChord(key, value) {
-        // If all selected chords have the same value for this key,
-        // toggle the current property, otherwise, set it.
-        const chords = this.score.getChordsInBar(this.selected.col, this.selected.row);
-        const [eqLeft, eqRight, , ] = CHORD_MAPPING[this.selected.slotRow][this.selected.slotCol];
-        const allEq = chords.slice(eqLeft + 1, eqRight).every(it => chords[eqLeft].equals(it));
-
-        if (allEq && chords[eqLeft][key] === value) {
+        // If all selected chords already have the given value for the given key, reset it.
+        if (this.getSelectedChord()[key] === value) {
             value = DEFAULT_CHORD_PROPERTIES[key];
         }
 
+        const chords = this.score.getChordsInBar(this.selected.col, this.selected.row);
+        const [eqLeft, eqRight, , ] = CHORD_MAPPING[this.selected.slotRow][this.selected.slotCol];
+
         chords.slice(eqLeft, eqRight).forEach(it => {
+            it[key] = value;
+        });
+
+        this.paletteView.showSelection();
+        this.scoreView.redraw();
+        this.save();
+    }
+
+    updateSelectedBar(key, value) {
+        // If all selected chords have the given value for the given key,
+        // reset the current property, otherwise, set it.
+        const chords = this.score.getChordsInBar(this.selected.col, this.selected.row);
+
+        if (chords.every(it => it[key] === value)) {
+            value = DEFAULT_CHORD_PROPERTIES[key];
+        }
+
+        chords.forEach(it => {
             it[key] = value;
         });
 

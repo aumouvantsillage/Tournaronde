@@ -19,9 +19,16 @@ const DIAGONALS = [
     ]
 ];
 
+const GRID_MARGIN = 1;
+const ROW_GAP = 10;
+const COLUMN_GAP = 0;
+const REPEAT_SIGN_WIDTH = 4;
+const REPEAT_SIGN_DOT_SPACING = 4 * REPEAT_SIGN_WIDTH;
+const REPEAT_SIGN_TOTAL_WIDTH = 5 * REPEAT_SIGN_WIDTH;
+
 const CHORD_SCALING_FACTOR = 0.85;
 const CHORD_TRANSLATION_SCALING_FACTOR = (2 - CHORD_SCALING_FACTOR) / 2;
-const CHORD_EXPONENT_SIZE = 0.75;
+const CHORD_EXPONENT_SIZE = 1;//0.75;
 
 const TEMPO_UNIT_TO_HTML = ["&#119133;", "&#119134;", "&#119135;", "&#119136;", "&#119137;" ]
 
@@ -98,7 +105,6 @@ export class ScoreView {
 
         this.tempoBpmInput.addEventListener("change", _ => {
             this.controller.setTempoBpm(parseInt(this.tempoBpmInput.value));
-
         });
     }
 
@@ -113,36 +119,15 @@ export class ScoreView {
     }
 
     redraw() {
-        const gridOutline = this.grid.querySelector(".outline");
-        const gridX       = gridOutline.x.baseVal.value;
-        const gridY       = gridOutline.y.baseVal.value;
-        const gridWidth   = gridOutline.width.baseVal.value;
-        const gridHeight  = gridOutline.height.baseVal.value;
-        const barWidth    = gridWidth / this.score.width;
-        const barHeight   = gridHeight / this.score.height;
+        const gridX      = this.grid.x.baseVal.value + GRID_MARGIN;
+        const gridY      = this.grid.y.baseVal.value + GRID_MARGIN;
+        const gridWidth  = this.grid.width.baseVal.value - 2 * GRID_MARGIN;
+        const gridHeight = this.grid.height.baseVal.value - 2 * GRID_MARGIN;
+        const barWidth   = Math.floor((gridWidth - (this.score.width - 1) * COLUMN_GAP) / this.score.width);
+        const barHeight  = Math.floor((gridHeight - (this.score.height - 1) * ROW_GAP) / this.score.height);
 
-        while (gridOutline.nextSibling) {
-            this.grid.removeChild(gridOutline.nextSibling);
-        }
-
-        // Add vertical lines.
-        for (let row = 1; row < this.score.height; row ++) {
-            addSVGElement(this.grid, "line", {
-                x1: gridX,
-                y1: gridY + row * barHeight,
-                x2: gridX + gridWidth,
-                y2: gridY + row * barHeight
-            });
-        }
-
-        // Add horizontal lines.
-        for (let col = 1; col < this.score.width; col ++) {
-            addSVGElement(this.grid, "line", {
-                x1: gridX + col * barWidth,
-                y1: gridY,
-                x2: gridX + col * barWidth,
-                y2: gridY + gridHeight
-            });
+        while (this.grid.firstChild) {
+            this.grid.removeChild(this.grid.firstChild);
         }
 
         const xText = addSVGElement(this.grid, "text", {}, "x");
@@ -150,10 +135,23 @@ export class ScoreView {
 
         // Add chords.
         for (let row = 0; row < this.score.height; row ++) {
-            const cellY = gridY + row * barHeight;
+            const cellY = gridY + row * (barHeight + ROW_GAP);
 
             for (let col = 0; col < this.score.width; col++) {
-                const cellX = gridX + col * barWidth;
+                const cellX = gridX + col * (barWidth + COLUMN_GAP);
+
+                const chords = this.score.getChordsInBar(col, row);
+                const hasRepeatStart = chords.some(c => !c.isEmpty() && c.repeatStart === "true");
+                const hasRepeatEnd = chords.some(c => !c.isEmpty() && c.repeatEnd === "true");
+                let usableLeftWidth = barWidth / 2;
+                let usableRightWidth = barWidth / 2;
+                if (hasRepeatStart) {
+                    usableLeftWidth -= REPEAT_SIGN_TOTAL_WIDTH;
+                }
+                if (hasRepeatEnd) {
+                    usableRightWidth -= REPEAT_SIGN_TOTAL_WIDTH;
+                }
+                const usableBarWidth = usableLeftWidth + usableRightWidth;
 
                 let diagonals = {};
 
@@ -162,7 +160,7 @@ export class ScoreView {
                     const slotColMax = slotRow === 0 ? 1 : 2;
 
                     for (let slotCol = slotColMin; slotCol <= slotColMax; slotCol ++) {
-                        const chord = this.controller.getChordInSlot(col, row, slotCol, slotRow, true);
+                        const chord = this.controller.getChordInSlot(col, row, slotCol, slotRow);
                         if (chord.isEmpty()) {
                             continue;
                         }
@@ -195,24 +193,37 @@ export class ScoreView {
                         if (chordText.right) {
                             ty -= xSize.height / 2;
                         }
+
                         let scaling;
                         if (slotCol === slotRow) {
                             if (slotCol === 1) {
                                 scaling = Math.min(
-                                    barWidth / textSize.width,
+                                    usableBarWidth / textSize.width,
                                     barHeight / textSize.height
                                 );
                                 tx += barWidth / 2;
+                                if (hasRepeatStart) {
+                                    tx += REPEAT_SIGN_TOTAL_WIDTH;
+                                }
+                                if (hasRepeatEnd) {
+                                    tx -= REPEAT_SIGN_TOTAL_WIDTH;
+                                }
                                 ty += barHeight / 2;
                             }
                             else {
-                                scaling = 1 / (textSize.width / barWidth + textSize.height / barHeight);
+                                scaling = 1 / (textSize.width / usableBarWidth + textSize.height / barHeight);
                                 if (slotCol === 0) {
                                     tx += textSize.width  * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                    if (hasRepeatStart) {
+                                        tx += REPEAT_SIGN_TOTAL_WIDTH;
+                                    }
                                     ty += textSize.height * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
                                 }
                                 else {
                                     tx += barWidth  - textSize.width  * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                    if (hasRepeatEnd) {
+                                        tx -= REPEAT_SIGN_TOTAL_WIDTH;
+                                    }
                                     ty += barHeight - textSize.height * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
                                 }
                             }
@@ -228,14 +239,21 @@ export class ScoreView {
                                     ty += barHeight - textSize.height * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
                                 }
                             }
-                            if (slotRow === 1) {
-                                scaling = 1 / (textSize.width / barWidth * 2 + textSize.height / barHeight);
+                            else if (slotRow === 1) {
                                 ty += barHeight / 2;
                                 if (slotCol === 0) {
+                                    scaling = 1 / (textSize.width / usableLeftWidth + textSize.height / barHeight);
                                     tx += textSize.width * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                    if (hasRepeatStart) {
+                                        tx += REPEAT_SIGN_TOTAL_WIDTH;
+                                    }
                                 }
                                 else {
+                                    scaling = 1 / (textSize.width / usableRightWidth + textSize.height / barHeight);
                                     tx += barWidth - textSize.width * scaling * CHORD_TRANSLATION_SCALING_FACTOR;
+                                    if (hasRepeatEnd) {
+                                        tx -= REPEAT_SIGN_TOTAL_WIDTH;
+                                    }
                                 }
                             }
                         }
@@ -256,56 +274,99 @@ export class ScoreView {
                     }
                 }
 
-                if (diagonals.primary) {
+                // Add the current cell's diagonal lines.
+                const addDiagonal = (dx1, dy1, dx2, dy2) => {
                     addSVGElement(this.grid, "line", {
                         class: "diagonal",
-                        x1: cellX,
-                        y1: cellY + barHeight,
-                        x2: cellX + barWidth,
-                        y2: cellY
+                        x1: cellX + dx1,
+                        y1: cellY + dy1,
+                        x2: cellX + dx2,
+                        y2: cellY + dy2
                     });
+                };
+
+                if (diagonals.primary) {
+                    addDiagonal(0, barHeight, barWidth, 0);
                 }
 
                 if (diagonals.topLeft) {
-                    addSVGElement(this.grid, "line", {
-                        class: "diagonal",
-                        x1: cellX,
-                        y1: cellY,
-                        x2: cellX + barWidth / 2,
-                        y2: cellY + barHeight / 2
-                    });
+                    addDiagonal(0, 0, barWidth / 2, barHeight / 2);
                 }
 
                 if (diagonals.bottomRight) {
-                    addSVGElement(this.grid, "line", {
-                        class: "diagonal",
-                        x1: cellX + barWidth,
-                        y1: cellY + barHeight,
-                        x2: cellX + barWidth / 2,
-                        y2: cellY + barHeight / 2
-                    });
+                    addDiagonal(barWidth, barHeight, barWidth / 2, barHeight / 2);
                 }
+
+                // Add the current cell's repeat signs.
+                const addRepeatSign = start => {
+                    let borderX = start ? cellX : cellX + barWidth;
+                    const step = start ? REPEAT_SIGN_WIDTH : -REPEAT_SIGN_WIDTH;
+                    const repeatSign = addSVGElement(this.grid, "g", {class: "repeat-sign"});
+                    addSVGElement(repeatSign, "rect", {
+                        x:      borderX + (start ? 0 : 2 * step),
+                        y:      cellY,
+                        width:  REPEAT_SIGN_WIDTH * 2,
+                        height: barHeight
+                    });
+                    addSVGElement(repeatSign, "rect", {
+                        x:      borderX + (start ? 0 : step),
+                        y:      cellY,
+                        width:  REPEAT_SIGN_WIDTH,
+                        height: barHeight
+                    });
+                    addSVGElement(this.grid, "circle", {
+                        class: "repeat-sign",
+                        cx:    borderX + 4 * step,
+                        cy:    cellY + (barHeight - REPEAT_SIGN_DOT_SPACING) / 2,
+                        r:     REPEAT_SIGN_WIDTH
+                    });
+                    addSVGElement(this.grid, "circle", {
+                        class: "repeat-sign",
+                        cx:    borderX + 4 * step,
+                        cy:    cellY + (barHeight + REPEAT_SIGN_DOT_SPACING) / 2,
+                        r:     REPEAT_SIGN_WIDTH
+                    });
+                };
+
+                if (hasRepeatStart) {
+                    addRepeatSign(true);
+                }
+                if (hasRepeatEnd) {
+                    addRepeatSign(false);
+                }
+
+                // Add the current cell's outline.
+                addSVGElement(this.grid, "rect", {
+                    x:      cellX,
+                    y:      cellY,
+                    width:  barWidth,
+                    height: barHeight
+                });
             }
         }
 
         // Add mouse targets.
         for (let row = 0; row < this.score.height; row ++) {
+            const cellY = gridY + row * (barHeight + ROW_GAP);
+
             for (let slotRow = 0; slotRow < 3; slotRow ++) {
                 for (let col = 0; col < this.score.width; col++) {
+                    const cellX = gridX + col * (barWidth + COLUMN_GAP);
+
                     for (let slotCol = 0; slotCol < 3; slotCol ++) {
                         let elt;
                         if (slotCol == 1 && slotRow == 1) {
                             elt = addSVGElement(this.grid, "ellipse", {
                                 class: "slot",
-                                cx: gridX + (col + 0.5) * barWidth,
-                                cy: gridY + (row + 0.5) * barHeight,
+                                cx: cellX + barWidth / 2,
+                                cy: cellY + barHeight / 2,
                                 rx: barWidth / 6,
                                 ry: barHeight / 6
                             });
                         }
                         else {
-                            const x0 = gridX + col * barWidth  + slotCol * barWidth  / 2;
-                            const y0 = gridY + row * barHeight + slotRow * barHeight / 2;
+                            const x0 = cellX + slotCol * barWidth  / 2;
+                            const y0 = cellY + slotRow * barHeight / 2;
                             let dx1, dy1, dx2, dy2, rx, ry;
                             if (slotCol == 1) {
                                 rx = barWidth  / 6;

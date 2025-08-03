@@ -145,9 +145,21 @@ input[type=number][disabled] {
     margin: 1rem auto;
 }
 
-.score-chords rect.outline,
+.score-chords rect,
 .score-chords line {
     fill: none;
+    stroke: black;
+    stroke-width: 2px;
+}
+
+.score-chords .repeat-sign rect,
+.score-chords .repeat-sign circle {
+    fill: black;
+    stroke: none;
+}
+
+.score-chords .repeat-sign rect:first-child {
+    fill: white;
     stroke: black;
     stroke-width: 2px;
 }
@@ -191,6 +203,8 @@ input[type=number][disabled] {
 
 .score-chords rect.debug {
     display: none;
+    stroke: red;
+    stroke-width: 1px;
     fill: rgba(255, 0, 0, 15%);
 }
 
